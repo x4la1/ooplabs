@@ -11,7 +11,7 @@ int main(int argc, char* argv[])
     {
         cout << "Invalid arguments count\n";
         cout << "Usage: FindText.exe <file name> <text for search>\n";
-        return 1;
+        return 0;
     }
 
     ifstream input;
@@ -19,14 +19,14 @@ int main(int argc, char* argv[])
     if (!input.is_open())
     {
         cout << "Failed to open '" << argv[1] << "'\n";
-        return 1;
+        return 0;
     }
 
     string searchText = argv[2];
     if (searchText == "")
     {
         cout << "Text for search must not be empty\n";
-        return 1;
+        return 0;
     }
 
 

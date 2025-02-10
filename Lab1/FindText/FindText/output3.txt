@@ -1,0 +1,1 @@
+Text for search must not be empty
