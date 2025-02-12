@@ -1,0 +1,1 @@
+Usage: MagicNumbers.exe -find <number> OR MagicNumbers.exe
