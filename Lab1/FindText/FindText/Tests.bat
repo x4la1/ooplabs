@@ -22,10 +22,6 @@ echo 4 test passed
 fc %Out% output5.txt > nul|| goto err
 echo 5 test passed
 
-%MyProgram% input5.txt privet > %Out% || goto err
-fc %Out% output5.txt > nul|| goto err
-echo 5 test passed
-
 %MyProgram% input6.txt privet > %Out% || goto err
 fc %Out% output6.txt > nul|| goto err
 echo 6 test passed

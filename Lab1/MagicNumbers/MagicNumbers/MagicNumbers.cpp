@@ -1,40 +1,46 @@
 ﻿#include <iostream>
 #include <cstdint>
 #include <string>
-using namespace std;
 
-
-int main(int argc, char* argv[])
+bool IsValidParams(int argc, char* argv[])
 {
-    
-    if (argc == 2 || argc > 3) 
+    if (argc == 2 || argc > 3)
     {
-        cout << "Usage: MagicNumbers.exe -find <number> OR MagicNumbers.exe\n";
-        return 0;
+        std::cout << "Usage: MagicNumbers.exe -find <number> OR MagicNumbers.exe\n";
+        return false;
     }
-    else if (argc == 3) 
+    else if (argc == 3)
     {
-        string param = argv[1];
-        if (param != "-find") 
+        std::string firstParameter = argv[1];
+        if (firstParameter != "-find")
         {
-            cout << "Usage: MagicNumbers.exe -find <number> OR MagicNumbers.exe\n";
-            return 0;
+            std::cout << "Usage: MagicNumbers.exe -find <number> OR MagicNumbers.exe\n";
+            return false;
         }
         else
         {
-            cout << "There is no magic numbers in this range\n";
-            return 0;
+            std::cout << "There is no magic numbers in this range\n"; //вынести
+            return false;
         }
     }
 
+    return true;
+}
+
+//вынести isMagicNumbers
+
+int main(int argc, char* argv[])
+{
+    if (!IsValidParams(argc, argv)) return 0;
+
     uint64_t number = 0;
-    if (cin >> number)
+    if (std::cin >> number)
     {
-        cout << "Non-magic\n";
+        std::cout << "Non-magic\n";
     }
     else
     {
-        cout << "Error\n";
+        std::cout << "Error\n";
     }
 
     return 0;

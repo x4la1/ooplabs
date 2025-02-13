@@ -3,57 +3,68 @@
 #include <string>
 #include <vector>
 
-using namespace std;
-
-int main(int argc, char* argv[])
+bool IsValidParameters(int argc, char* argv[])
 {
     if (argc != 3)
     {
-        cout << "Invalid arguments count\n";
-        cout << "Usage: FindText.exe <file name> <text for search>\n";
-        return 0;
+        std::cout << "Invalid arguments count\n";
+        std::cout << "Usage: FindText.exe <file name> <text for search>\n";
+        return false;
     }
 
-    ifstream input;
-    input.open(argv[1]);
-    if (!input.is_open())
-    {
-        cout << "Failed to open '" << argv[1] << "'\n";
-        return 0;
-    }
-
-    string searchText = argv[2];
+    std::string searchText = argv[2];
     if (searchText == "")
     {
-        cout << "Text for search must not be empty\n";
-        return 0;
+        std::cout << "Text for search must not be empty\n";
+        return false;
     }
 
+    return true;
+}
 
-    vector<int> lineNumbers = {};
+void FindText(std::ifstream &input, std::string searchText)
+{
+    std::vector<int> lineNumbers;
     std::string line;
-    int lineNumber = 0;
+    int lineCounter = 0; //name
     while (getline(input, line))
     {
-        lineNumber++;
-        if (line.find(searchText) != string::npos)
+        lineCounter++;
+        if (line.find(searchText) != std::string::npos)
         {
-            lineNumbers.push_back(lineNumber);
+            lineNumbers.push_back(lineCounter);
         }
     }
 
     if (lineNumbers.empty())
     {
-        cout << "Text not found\n";
+        std::cout << "Text not found\n";
     }
     else
     {
         for (int item : lineNumbers)
         {
-            cout << item << "\n";
+            std::cout << item << "\n";
         }
     }
+}
 
+int main(int argc, char* argv[])
+{
+    //функция возвращает структуру аргументов
+    //проверка пустой строки в findText
+    //права доступа
+    if (!IsValidParameters(argc, argv)) return 1;
+
+    std::ifstream input;
+    input.open(argv[1]);
+    if (!input.is_open())
+    {
+        std::cout << "Failed to open '" << argv[1] << "'\n";
+        return 0;
+    }
+    
+    FindText(input, argv[2]);
 
     return 0;
 }
