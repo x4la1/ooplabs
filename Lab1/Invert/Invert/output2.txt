@@ -1,0 +1,4 @@
+This program inverts 3x3 matrix
+Usage: invert.exe filename OR invert.exe
+filename: A file containing a 3x3 matrix, the numbers are tab-separated
+If file is not provided matrix input via stdin
