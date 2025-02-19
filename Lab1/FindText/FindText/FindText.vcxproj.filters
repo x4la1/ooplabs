@@ -66,6 +66,18 @@
     <Text Include="output6.txt">
       <Filter>tests_data</Filter>
     </Text>
+    <Text Include="input8.txt">
+      <Filter>tests_data</Filter>
+    </Text>
+    <Text Include="input9.txt">
+      <Filter>tests_data</Filter>
+    </Text>
+    <Text Include="output8.txt">
+      <Filter>tests_data</Filter>
+    </Text>
+    <Text Include="output9.txt">
+      <Filter>tests_data</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <None Include="Tests.bat">
