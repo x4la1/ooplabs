@@ -3,16 +3,17 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <set>
 #include <sstream>
 #include <string>
 #include <vector>
-#include <set>
 // 4 2	обработать
+//доработать проверки не проходят 1 1 1(пробелы)
 using Matrix = std::vector<std::vector<double>>;
 
 const std::set<char> validDigits{ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '-' };
 
-bool IsValidChar(char ch)
+bool IsValidChar(const char& ch)
 {
 	if (!validDigits.count(ch))
 	{
@@ -21,32 +22,34 @@ bool IsValidChar(char ch)
 	return true;
 }
 
-bool IsTokenContainInvalidSymbols(const std::string& token)
+bool IsStringContainInvalidSymbols(const std::string& token)
 {
 	return token.find("-.") != std::string::npos
-		|| token.find(".-") != std::string::npos;
+		|| token.find(".-") != std::string::npos
+		|| token.find("--") != std::string::npos
+		|| token.find("..") != std::string::npos;
 }
 
-bool IsValidNumber(const std::string& token) //доработать проверки не проходят 1 1 1(пробелы)
+bool IsValidNumber(const std::string& token) 
 {
 	if (token.empty())
 	{
 		return false;
 	}
 
-	if (token[0] == '.' || token[0] == '0')
+	if (token[0] == '.' || (token[0] == '0' && token.size() > 1) || !IsValidChar(token[0]))
 	{
 		return false;
 	}
 
-	if (IsTokenContainInvalidSymbols(token))
+	if (IsStringContainInvalidSymbols(token))
 	{
 		return false;
 	}
 
 	uint32_t dotCount = 0;
 	uint32_t minusCount = 0;
-	for (size_t i = 1; i < token.length(); i++)
+	for (size_t i = 1; i < token.length(); ++i)
 	{
 		if (!IsValidChar(token[i]))
 		{
@@ -65,14 +68,12 @@ bool IsValidNumber(const std::string& token) //доработать провер
 		{
 			return false;
 		}
-
-		
 	}
 
 	return true;
 }
 
-bool IsNumber(std::string token)
+bool IsNumber(const std::string& token)
 {
 	if (!IsValidNumber(token))
 	{
@@ -113,11 +114,12 @@ bool ReadRow(std::istream& input, std::vector<double>& row)
 	}
 	if (buff.size() != 3)
 	{
-		std::cout << "Invalid matrix format\n";	
+		std::cout << "Invalid matrix format\n"; 
+		return false;
 	}
 
 	uint32_t column = 0;
-	for (std::string token: buff)
+	for (std::string token : buff)
 	{
 		column++;
 		if (!IsNumber(token))
@@ -137,9 +139,9 @@ bool IsInvalidRemainingInput(std::istream& input)
 	return std::getline(input, line) && !line.empty();
 }
 
-bool ReadMatrixFromStdin(std::istream& input, Matrix& matrix) //stream
+bool ReadMatrixFromStdin(std::istream& input, Matrix& matrix)
 {
-	for (int rows = 0; rows < 3; rows++)
+	for (int rows = 0; rows < 3; ++rows)
 	{
 		if (!ReadRow(input, matrix[rows]))
 		{
@@ -152,7 +154,7 @@ bool ReadMatrixFromStdin(std::istream& input, Matrix& matrix) //stream
 
 bool ReadMatrixFromFile(std::ifstream& input, Matrix& matrix)
 {
-	for (int rows = 0; rows < 3; rows++)
+	for (int rows = 0; rows < 3; ++rows)
 	{
 		if (!ReadRow(input, matrix[rows]))
 		{
@@ -201,9 +203,9 @@ bool InvertMatrix(const Matrix& matrix, Matrix& invertedMatrix)
 
 void PrintMatrix(const Matrix& matrix)
 {
-	for (size_t i = 0; i < 3; i++)
+	for (size_t i = 0; i < 3; ++i)
 	{
-		for (size_t j = 0; j < 3; j++)
+		for (size_t j = 0; j < 3; ++j)
 		{
 			std::cout << std::fixed << std::setprecision(3) << matrix[i][j];
 			if (j != 2)
@@ -228,7 +230,6 @@ void PrintHelp()
 
 Matrix CreateZeroMatrix()
 {
-
 	return {
 		{ 0.0, 0.0, 0.0 },
 		{ 0.0, 0.0, 0.0 },

@@ -131,5 +131,41 @@
     <Text Include="output17.txt">
       <Filter>test_data</Filter>
     </Text>
+    <Text Include="input18.txt">
+      <Filter>test_data</Filter>
+    </Text>
+    <Text Include="input19.txt">
+      <Filter>test_data</Filter>
+    </Text>
+    <Text Include="output18.txt">
+      <Filter>test_data</Filter>
+    </Text>
+    <Text Include="input22.txt">
+      <Filter>test_data</Filter>
+    </Text>
+    <Text Include="input20.txt">
+      <Filter>test_data</Filter>
+    </Text>
+    <Text Include="input23.txt">
+      <Filter>test_data</Filter>
+    </Text>
+    <Text Include="input21.txt">
+      <Filter>test_data</Filter>
+    </Text>
+    <Text Include="output22.txt">
+      <Filter>test_data</Filter>
+    </Text>
+    <Text Include="output23.txt">
+      <Filter>test_data</Filter>
+    </Text>
+    <Text Include="output19.txt">
+      <Filter>test_data</Filter>
+    </Text>
+    <Text Include="output20.txt">
+      <Filter>test_data</Filter>
+    </Text>
+    <Text Include="output21.txt">
+      <Filter>test_data</Filter>
+    </Text>
   </ItemGroup>
 </Project>

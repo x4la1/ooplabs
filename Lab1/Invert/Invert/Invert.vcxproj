@@ -171,7 +171,13 @@
     <Text Include="input15.txt" />
     <Text Include="input16.txt" />
     <Text Include="input17.txt" />
+    <Text Include="input18.txt" />
+    <Text Include="input19.txt" />
     <Text Include="input2.txt" />
+    <Text Include="input20.txt" />
+    <Text Include="input21.txt" />
+    <Text Include="input22.txt" />
+    <Text Include="input23.txt" />
     <Text Include="input3.txt" />
     <Text Include="input4.txt" />
     <Text Include="input5.txt" />
@@ -179,6 +185,8 @@
     <Text Include="input7.txt" />
     <Text Include="input8.txt" />
     <Text Include="input9.txt" />
+    <Text Include="output22.txt" />
+    <Text Include="output23.txt" />
     <Text Include="output1.txt" />
     <Text Include="output10.txt" />
     <Text Include="output11.txt" />
@@ -188,7 +196,11 @@
     <Text Include="output15.txt" />
     <Text Include="output16.txt" />
     <Text Include="output17.txt" />
+    <Text Include="output18.txt" />
+    <Text Include="output19.txt" />
     <Text Include="output2.txt" />
+    <Text Include="output20.txt" />
+    <Text Include="output21.txt" />
     <Text Include="output3.txt" />
     <Text Include="output4.txt" />
     <Text Include="output5.txt" />

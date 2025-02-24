@@ -87,6 +87,36 @@ IF ERRORLEVEL 1 goto err
 fc %Out% output17.txt || goto err
 echo 17 test passed
 
+%MyProgram% input18.txt > %Out% 
+IF NOT ERRORLEVEL 1 goto err
+fc %Out% output18.txt || goto err
+echo 18 test passed
+
+%MyProgram% input19.txt > %Out% 
+IF NOT ERRORLEVEL 1 goto err
+fc %Out% output19.txt || goto err
+echo 19 test passed
+
+%MyProgram% input20.txt > %Out% 
+IF NOT ERRORLEVEL 1 goto err
+fc %Out% output20.txt || goto err
+echo 20 test passed
+
+%MyProgram% input21.txt > %Out% 
+IF NOT ERRORLEVEL 1 goto err
+fc %Out% output21.txt || goto err
+echo 21 test passed
+
+%MyProgram% input22.txt > %Out% 
+IF NOT ERRORLEVEL 1 goto err
+fc %Out% output22.txt || goto err
+echo 22 test passed
+
+%MyProgram% input23.txt > %Out% 
+IF NOT ERRORLEVEL 1 goto err
+fc %Out% output23.txt || goto err
+echo 23 test passed
+
 echo All tests passed
 exit 0
 
