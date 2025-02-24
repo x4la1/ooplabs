@@ -24,8 +24,12 @@ bool IsValidArguments(int argc, char* argv[])
 	return true;
 }
 
+bool IsMagicNumber(uint64_t number)
+{
+	return false;
+}
+
 //вынести isMagicNumber
-//-find logica
 int main(int argc, char* argv[])
 {
 	if (argc != 1)
@@ -44,7 +48,11 @@ int main(int argc, char* argv[])
 	uint64_t number = 0;
 	if (std::cin >> number)
 	{
-		std::cout << "Non-magic\n";
+		if (!IsMagicNumber(number))
+		{
+			std::cout << "Non-magic\n";
+			return 0;
+		}
 	}
 	else
 	{

@@ -6,36 +6,53 @@
 #include <sstream>
 #include <string>
 #include <vector>
-
+#include <set>
+// 4 2	обработать
 using Matrix = std::vector<std::vector<double>>;
 
-bool DoesTokenContainInvalidChars(const std::string& token)
+const std::set<char> validDigits{ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '-' };
+
+bool IsValidChar(char ch)
 {
-	return token.find("-.") != std::string::npos
-		|| token.find(".-") != std::string::npos
-		|| token.find("+") != std::string::npos;
+	if (!validDigits.count(ch))
+	{
+		return false;
+	}
+	return true;
 }
 
-bool IsValidNumber(const std::string& token)
+bool IsTokenContainInvalidSymbols(const std::string& token)
+{
+	return token.find("-.") != std::string::npos
+		|| token.find(".-") != std::string::npos;
+}
+
+bool IsValidNumber(const std::string& token) //доработать проверки не проходят 1 1 1(пробелы)
 {
 	if (token.empty())
 	{
 		return false;
 	}
 
-	if (token[0] == '.')
+	if (token[0] == '.' || token[0] == '0')
 	{
 		return false;
 	}
 
-	if (DoesTokenContainInvalidChars(token))
+	if (IsTokenContainInvalidSymbols(token))
 	{
 		return false;
 	}
 
-	int dotCount = 0;
+	uint32_t dotCount = 0;
+	uint32_t minusCount = 0;
 	for (size_t i = 1; i < token.length(); i++)
 	{
+		if (!IsValidChar(token[i]))
+		{
+			return false;
+		}
+
 		if (token[i] == '.')
 		{
 			dotCount++;
@@ -44,11 +61,12 @@ bool IsValidNumber(const std::string& token)
 				return false;
 			}
 		}
-
 		if (token[i] == '-')
 		{
 			return false;
 		}
+
+		
 	}
 
 	return true;
@@ -86,28 +104,28 @@ bool ReadRow(std::istream& input, std::vector<double>& row)
 		return false;
 	}
 
-	std::stringstream ss{ line };
+	std::vector<std::string> buff{};
 	std::string token{};
-	uint32_t column = 0;
+	std::stringstream ss{ line };
 	while (std::getline(ss, token, '\t'))
 	{
+		buff.push_back(token);
+	}
+	if (buff.size() != 3)
+	{
+		std::cout << "Invalid matrix format\n";	
+	}
+
+	uint32_t column = 0;
+	for (std::string token: buff)
+	{
 		column++;
-		if (column > 3)
-		{
-			std::cout << "Invalid matrix format\n";
-			return false;
-		}
 		if (!IsNumber(token))
 		{
 			std::cout << "Invalid matrix\n";
 			return false;
 		}
 		row[column - 1] = std::stod(token);
-	}
-	if (column != 3)
-	{
-		std::cout << "Invalid matrix format\n";
-		return false;
 	}
 
 	return true;
@@ -119,7 +137,7 @@ bool IsInvalidRemainingInput(std::istream& input)
 	return std::getline(input, line) && !line.empty();
 }
 
-bool ReadMatrixFromStdin(std::istream& input, Matrix& matrix)
+bool ReadMatrixFromStdin(std::istream& input, Matrix& matrix) //stream
 {
 	for (int rows = 0; rows < 3; rows++)
 	{
@@ -132,7 +150,7 @@ bool ReadMatrixFromStdin(std::istream& input, Matrix& matrix)
 	return true;
 }
 
-bool ReadMatrixFromFile(std::istream& input, Matrix& matrix)
+bool ReadMatrixFromFile(std::ifstream& input, Matrix& matrix)
 {
 	for (int rows = 0; rows < 3; rows++)
 	{
