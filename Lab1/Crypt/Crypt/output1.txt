@@ -1,0 +1,1 @@
+Usage: Crypt.exe crypt|decrypt <input file> <output file> <key>(0-255)
