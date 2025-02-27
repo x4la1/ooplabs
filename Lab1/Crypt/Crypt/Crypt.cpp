@@ -1,10 +1,10 @@
 ﻿#include <cctype>
 #include <cstdint>
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <optional>
 #include <string>
-#include <filesystem>
 
 enum class Operation
 {
@@ -32,6 +32,7 @@ bool IsNumber(std::string str)
 
 	return true;
 }
+
 
 std::optional<Arguments> ParseArguments(const int& argc, char* argv[])
 {
@@ -64,7 +65,7 @@ std::optional<Arguments> ParseArguments(const int& argc, char* argv[])
 		return std::nullopt;
 	}
 
-	int key{}; //IsValidKey
+	int key{};
 	try
 	{
 		key = std::stoi(fourthArgument);
@@ -95,15 +96,15 @@ void PrintUsage()
 unsigned char MixByte(const unsigned char& byte)
 {
 	unsigned char mixedByte = 0;
-	mixedByte |= ((byte >> 0) & 1) << 2; 
-	mixedByte |= ((byte >> 1) & 1) << 3; 
-	mixedByte |= ((byte >> 2) & 1) << 4; 
-	mixedByte |= ((byte >> 3) & 1) << 6; 
-	mixedByte |= ((byte >> 4) & 1) << 7; 
-	mixedByte |= ((byte >> 5) & 1) << 0; 
-	mixedByte |= ((byte >> 6) & 1) << 1; 
-	mixedByte |= ((byte >> 7) & 1) << 5; 
-	
+	mixedByte |= ((byte >> 0) & 1) << 2;
+	mixedByte |= ((byte >> 1) & 1) << 3;
+	mixedByte |= ((byte >> 2) & 1) << 4;
+	mixedByte |= ((byte >> 3) & 1) << 6;
+	mixedByte |= ((byte >> 4) & 1) << 7;
+	mixedByte |= ((byte >> 5) & 1) << 0;
+	mixedByte |= ((byte >> 6) & 1) << 1;
+	mixedByte |= ((byte >> 7) & 1) << 5;
+
 	return mixedByte;
 }
 
@@ -160,10 +161,9 @@ void DecryptFile(std::ifstream& input, std::ofstream& output, const int& key)
 		byte = DecryptByte(byte, key);
 		output.put(static_cast<char>(byte));
 	}
-	
 }
 
-int main(int argc, char* argv[])
+int main(int argc, char* argv[]) //вывод ошибки под key
 {
 	auto arguments = ParseArguments(argc, argv);
 	if (arguments == std::nullopt)
@@ -179,13 +179,7 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	if (!std::filesystem::exists(arguments->outputFile))
-	{
-		std::cout << "Failed to open output file\n";
-		return 1;
-	}
-
-	std::ofstream output(arguments->outputFile, std::ios::binary);
+	std::ofstream output{ arguments->outputFile, std::ios::binary };
 	if (!output.is_open())
 	{
 		std::cout << "Failed to open output file\n";

@@ -48,7 +48,6 @@ bool IsValidNumber(const std::string& token)
 	}
 
 	uint32_t dotCount = 0;
-	uint32_t minusCount = 0;
 	for (size_t i = 1; i < token.length(); ++i)
 	{
 		if (!IsValidChar(token[i]))

@@ -32,11 +32,6 @@ IF NOT ERRORLEVEL 1 goto err
 fc %Out% output6.txt || goto err
 echo 6 test passed
 
-%MyProgram% crypt input7.txt asdasddas.txt 123 > %Out% 
-IF NOT ERRORLEVEL 1 goto err
-fc %Out% output7.txt || goto err
-echo 7 test passed
-
 %MyProgram% crypt input8.txt %Out% 100
 IF ERRORLEVEL 1 goto err
 fc %Out% output8.txt || goto err
