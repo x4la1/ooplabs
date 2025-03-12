@@ -47,3 +47,23 @@ TEST_CASE("AddWordInDictionary()")
 	AddWordInDictionary(input1, "meat", "мясо");
 	CHECK(input1 == output1); //добавление слов
 }
+
+TEST_CASE("FindWordInDictionary()")
+{
+	Dictionary dict = {
+		{ "The Red Square", "Красная площадь" },
+		{ "ball", "мяч" },
+		{ "bye", "пока" },
+		{ "cat", "кот, кошка" },
+		{ "hello", "привет" },
+		{ "meat", "мясо" }
+	};
+	std::string word1 = "ball";
+	std::string translatedWord{};
+	FindWordInDictionary(dict, word1, translatedWord);
+	CHECK(translatedWord == "мяч"); //поиск слова
+
+	std::string word2 = "alo";
+	CHECK(FindWordInDictionary(dict, word2, translatedWord) == false);
+
+}

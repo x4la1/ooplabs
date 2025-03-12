@@ -132,6 +132,18 @@ void ExitProgram(const size_t& pairsCount, const Dictionary& dictionary, const s
 	}
 }
 
+bool FindWordInDictionary(const Dictionary& dictionary, const std::string& word, std::string& translatedWord)
+{
+	auto foundedWord = dictionary.find(word);
+	if (foundedWord == dictionary.end())
+	{
+		return false;
+	}
+	translatedWord = foundedWord->second;
+
+	return true;
+}
+
 #ifndef UNIT_TEST
 
 int main(int argv, char* argc[])
@@ -171,6 +183,7 @@ int main(int argv, char* argc[])
 	}
 
 	std::string word{};
+	std::string translatedWord{};
 	std::string line{};
 	std::string letter{};
 	size_t pairsCount = dictionary.size();
@@ -188,10 +201,9 @@ int main(int argv, char* argc[])
 			continue;
 		}
 
-		auto tranlateWord = dictionary.find(word);
-		if (tranlateWord != dictionary.end())
+		if (FindWordInDictionary(dictionary, word, translatedWord))
 		{
-			std::cout << tranlateWord->second << "\n";
+			std::cout << translatedWord << "\n";
 		}
 		else
 		{
