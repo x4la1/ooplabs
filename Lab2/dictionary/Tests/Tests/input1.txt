@@ -1,0 +1,6 @@
+The Red Square:  расна€ площадь
+ball: м€ч
+bye: пока
+cat: кот, кошка
+hello: привет
+meat: м€со

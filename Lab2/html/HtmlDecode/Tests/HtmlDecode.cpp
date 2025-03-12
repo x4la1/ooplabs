@@ -1,8 +1,8 @@
 #include "HtmlDecode.h"
-#include <map>
-#include <string>
-#include <stdexcept>
 #include <iostream>
+#include <map>
+#include <stdexcept>
+#include <string>
 
 const std::map<std::string, char> htmlSymbols{ { "&quot;", '"' }, { "&apos;", '\'' }, { "&lt;", '<' }, { "&gt;", '>' }, { "&amp;", '&' } };
 
@@ -15,16 +15,24 @@ std::string HtmlDecode(std::string const& html)
 		if (html[i] == '&')
 		{
 			size_t semicolonPosition = html.find(';', i);
-			if (semicolonPosition != std::string::npos)
+
+			if (semicolonPosition == std::string::npos)
 			{
-				std::string htmlEntity = html.substr(i, semicolonPosition - i + 1); 
-				auto symbol = htmlSymbols.find(htmlEntity);
-				if (symbol != htmlSymbols.end())
-				{
-					decodedString += symbol->second;
-					i = semicolonPosition;
-					continue;
-				}
+				throw std::invalid_argument("Invalid HTML symbol\n");
+			}
+
+			std::string htmlEntity = html.substr(i, semicolonPosition - i + 1);
+			auto symbol = htmlSymbols.find(htmlEntity);
+
+			if (symbol != htmlSymbols.end())
+			{
+				decodedString += symbol->second;
+				i = semicolonPosition;
+				continue;
+			}
+			else
+			{
+				throw std::invalid_argument("Invalid HTML symbol\n");
 			}
 		}
 		decodedString += html[i];
@@ -37,14 +45,25 @@ std::string HtmlDecode(std::string const& html)
 
 int main()
 {
-	std::string line;
+	std::string line{};
+	std::string decodedLine{};
+
 	while (std::getline(std::cin, line))
 	{
 		if (line == "end")
 		{
 			break;
 		}
-		std::cout << HtmlDecode(line) << "\n";
+		try
+		{
+			decodedLine = HtmlDecode(line);
+		}
+		catch (std::invalid_argument& e)
+		{
+			std::cout << e.what();
+			continue;
+		}
+		std::cout << decodedLine << "\n";
 	}
 
 	return 0;
