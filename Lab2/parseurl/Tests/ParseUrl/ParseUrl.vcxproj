@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{95b4fd15-467e-4ec1-a859-05f201af9aa5}</ProjectGuid>
-    <RootNamespace>Crypt</RootNamespace>
+    <ProjectGuid>{830ab257-9d77-4329-b9ea-e3fa705f0266}</ProjectGuid>
+    <RootNamespace>ParseUrl</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -94,10 +94,6 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-    <PostBuildEvent>
-      <Command>
-      </Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -115,10 +111,6 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-    <PostBuildEvent>
-      <Command>
-      </Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -132,10 +124,6 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-    <PostBuildEvent>
-      <Command>
-      </Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -153,37 +141,12 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-    <PostBuildEvent>
-      <Command>
-      </Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Crypt.cpp" />
+    <ClCompile Include="ParseUrl.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="input1.txt" />
-    <Text Include="input2.txt" />
-    <Text Include="input3.txt" />
-    <Text Include="input4.txt" />
-    <Text Include="input5.txt" />
-    <Text Include="input6.txt" />
-    <Text Include="input7.txt" />
-    <Text Include="input8.txt" />
-    <Text Include="input9.txt" />
-    <Text Include="output1.txt" />
-    <Text Include="output10.txt" />
-    <Text Include="output2.txt" />
-    <Text Include="output3.txt" />
-    <Text Include="output4.txt" />
-    <Text Include="output5.txt" />
-    <Text Include="output6.txt" />
-    <Text Include="output7.txt" />
-    <Text Include="output8.txt" />
-    <Text Include="output9.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Tests.bat" />
+    <ClInclude Include="ParseUrl.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
