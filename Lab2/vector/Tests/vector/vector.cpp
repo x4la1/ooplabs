@@ -17,6 +17,7 @@ bool IsValidChar(const char& ch)
 	{
 		return false;
 	}
+
 	return true;
 }
 
@@ -174,7 +175,7 @@ void PrintSortedNumbers(std::vector<double> numbers)
 
 #ifndef UNIT_TESTS
 
-int main()
+int main() 
 {
 	std::vector<double> numbers{};
 	try

@@ -1,4 +1,4 @@
-The Red Square: Красная площадь
+п»їThe Red Square: Красная площадь
 ball: мяч
 bye: пока
 cat: кот, кошка

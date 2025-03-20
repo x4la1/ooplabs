@@ -1,3 +1,3 @@
 #include <set>
 
-std::set<uint32_t> GeneratePrimeNumbersSet(uint32_t upperBound);
+std::set<uint32_t> GeneratePrimeNumbersSet(const uint32_t& upperBound);

@@ -1,11 +1,14 @@
-﻿#include <iostream>
+﻿#include "Tests/dictionary/dictionary.h"
 #include <catch2/catch.hpp>
-#include "Tests/dictionary/dictionary.h"
-#include <stdexcept>
 #include <fstream>
+#include <iostream>
+#include <stdexcept>
+#include <windows.h>
 
 TEST_CASE("ReadWordsFromString()")
 {
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
 	CHECK_THROWS_AS(ReadWordsFromString(" : abc, ads "), std::exception); //пустое слово
 	CHECK_THROWS_AS(ReadWordsFromString("cat:  "), std::exception); // пустое слово
 	CHECK_THROWS_AS(ReadWordsFromString("cat: asd: asd "), std::exception); // 2 двоеточия
@@ -16,26 +19,30 @@ TEST_CASE("ReadWordsFromString()")
 
 TEST_CASE("CreateDictionaryFromFile()")
 {
-	Dictionary expectedResult1 = { { "The Red Square", "Красная площадь" },
+	Dictionary expectedResult1 = {
+		{ "The Red Square", "Красная площадь" },
 		{ "ball", "мяч" },
 		{ "bye", "пока" },
 		{ "cat", "кот, кошка" },
 		{ "hello", "привет" },
-		{ "meat", "мясо" } };
+		{ "meat", "мясо" }
+	};
 	std::ifstream input1("input1.txt");
 	CHECK(expectedResult1 == CreateDictionaryFromFile(input1)); // успешное считывание
-	
+
 	std::ifstream input2("input2.txt");
 	CHECK_THROWS_AS(CreateDictionaryFromFile(input2), std::exception); //пустое слово
 }
 
 TEST_CASE("AddWordInDictionary()")
 {
-	Dictionary input1 = { { "The Red Square", "Красная площадь" },
+	Dictionary input1 = {
+		{ "The Red Square", "Красная площадь" },
 		{ "ball", "мяч" },
 		{ "bye", "пока" },
 		{ "cat", "кот, кошка" },
-		{ "hello", "привет" },};
+		{ "hello", "привет" },
+	};
 	Dictionary output1 = {
 		{ "The Red Square", "Красная площадь" },
 		{ "ball", "мяч" },
@@ -65,5 +72,4 @@ TEST_CASE("FindWordInDictionary()")
 
 	std::string word2 = "alo";
 	CHECK(FindWordInDictionary(dict, word2, translatedWord) == false);
-
 }

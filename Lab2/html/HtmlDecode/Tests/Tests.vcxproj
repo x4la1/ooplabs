@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="HtmlDecode.cpp" />
   </ItemGroup>
   <ItemGroup>

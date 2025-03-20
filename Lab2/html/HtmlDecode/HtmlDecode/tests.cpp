@@ -1,19 +1,32 @@
-#include <catch2/catch.hpp>
 #include "HtmlDecode.h"
-#include <string>
+#include <catch2/catch.hpp>
 #include <stdexcept>
+#include <string>
 
-
-TEST_CASE("HtmlDecode()")
+TEST_CASE("HtmlDecode() - РїСЂРѕРІРµСЂРєР° РІСЃРµС… СЃСѓС‰РЅРѕСЃС‚РµР№") //СЂР°Р·РЅС‹Рµ test cases + СЃСѓС‰РЅРѕСЃС‚СЊ РІ РЅР°С‡Р°Р»Рµ
 {
-	std::string result1 = HtmlDecode("Cat &lt;says&gt; &quot;Meow&quot;. M&amp;M&apos;s"); //проверка всех сущностей
+	std::string result1 = HtmlDecode("Cat &lt;says&gt; &quot;Meow&quot;. M&amp;M&apos;s"); 
 	CHECK(result1 == "Cat <says> \"Meow\". M&M's");
-	
-	std::string result2 = HtmlDecode("Cat <says> \"Meow\". MnM’s"); //без сущностей
-	CHECK(result2 == "Cat <says> \"Meow\". MnM’s");
-
-	CHECK_THROWS_AS(HtmlDecode("Cat &lt;says&gt; &quoot;Meow&quot;. M&amp;M&apos;s"), std::invalid_argument); //несуществующая сущность
-
-	CHECK_THROWS_AS(HtmlDecode("Cat &lt;says&gt; &quoot;Meow&quot;. M&amp;M&aposs"), std::invalid_argument); //нет ; на конце
 }
 
+TEST_CASE("HtmlDecode() - Р±РµР· СЃСѓС‰РЅРѕСЃС‚РµР№")
+{
+	std::string result2 = HtmlDecode("Cat <says> \"Meow\". MnMРўs");
+	CHECK(result2 == "Cat <says> \"Meow\". MnMРўs");
+}
+
+TEST_CASE("HtmlDecode() - РЅРµСЃСѓС‰РµСЃС‚РІСѓСЋС‰Р°СЏ СЃСѓС‰РЅРѕСЃС‚СЊ")
+{
+	CHECK_THROWS_AS(HtmlDecode("Cat &lt;says&gt; &quoot;Meow&quot;. M&amp;M&apos;s"), std::invalid_argument); 
+}
+
+TEST_CASE("HtmlDecode() - РЅРµС‚ ; РЅР° РєРѕРЅС†Рµ")
+{
+	CHECK_THROWS_AS(HtmlDecode("Cat &lt;says&gt; &quoot;Meow&quot;. M&amp;M&aposs"), std::invalid_argument);
+}
+
+TEST_CASE("HtmlDecode() - СЃСѓС‰РЅРѕСЃС‚СЊ РІ РЅР°С‡Р°Р»Рµ")
+{
+	std::string result3 = HtmlDecode("&quot;Cat &lt;says&gt; &quot;Meow&quot;. M&amp;M&apos;s");
+	CHECK("\"Cat <says> \"Meow\". M&M's");
+}

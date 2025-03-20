@@ -8,7 +8,7 @@ bool IsValidProtocol(std::string& protocolString, Protocol& protocol, int& port)
 {
 	std::transform(protocolString.begin(), protocolString.end(), protocolString.begin(), tolower);
 
-	if (protocolString == "http")
+	if (protocolString == "http") //map, struct, init protocol
 	{
 		protocol = Protocol::HTTP;
 		port = 80;
@@ -36,7 +36,7 @@ bool IsValidPort(const std::string& portString, int& port)
 	try
 	{
 		port = std::stoi(portString);
-		if (port < 1 || port > 65535)
+		if (port < 1 || port > 65535) //const вынести
 		{
 			return false;
 		}
@@ -59,7 +59,7 @@ bool ParseURL(const std::string& url, Protocol& protocol, int& port, std::string
 	std::smatch match{};
 
 	std::string lowerCaseUrl = url;
-	std::transform(lowerCaseUrl.begin(), lowerCaseUrl.end(), lowerCaseUrl.begin(), tolower);
+	std::transform(lowerCaseUrl.begin(), lowerCaseUrl.end(), lowerCaseUrl.begin(), tolower); //lowercaseurl to all func
 
 	if (!std::regex_match(lowerCaseUrl, match, urlPattern))
 	{

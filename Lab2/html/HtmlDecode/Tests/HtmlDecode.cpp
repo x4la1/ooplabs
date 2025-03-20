@@ -4,7 +4,7 @@
 #include <stdexcept>
 #include <string>
 
-const std::map<std::string, char> htmlSymbols{ { "&quot;", '"' }, { "&apos;", '\'' }, { "&lt;", '<' }, { "&gt;", '>' }, { "&amp;", '&' } };
+const std::map<std::string, char> HTML_SYMBOLS{ { "&quot;", '"' }, { "&apos;", '\'' }, { "&lt;", '<' }, { "&gt;", '>' }, { "&amp;", '&' } };
 
 std::string HtmlDecode(std::string const& html)
 {
@@ -22,9 +22,9 @@ std::string HtmlDecode(std::string const& html)
 			}
 
 			std::string htmlEntity = html.substr(i, semicolonPosition - i + 1);
-			auto symbol = htmlSymbols.find(htmlEntity);
+			auto symbol = HTML_SYMBOLS.find(htmlEntity);
 
-			if (symbol != htmlSymbols.end())
+			if (symbol != HTML_SYMBOLS.end())
 			{
 				decodedString += symbol->second;
 				i = semicolonPosition;
@@ -40,33 +40,3 @@ std::string HtmlDecode(std::string const& html)
 
 	return decodedString;
 }
-
-#ifndef UNIT_TEST
-
-int main()
-{
-	std::string line{};
-	std::string decodedLine{};
-
-	while (std::getline(std::cin, line))
-	{
-		if (line == "end")
-		{
-			break;
-		}
-		try
-		{
-			decodedLine = HtmlDecode(line);
-		}
-		catch (std::invalid_argument& e)
-		{
-			std::cout << e.what();
-			continue;
-		}
-		std::cout << decodedLine << "\n";
-	}
-
-	return 0;
-}
-
-#endif

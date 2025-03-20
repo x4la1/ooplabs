@@ -162,8 +162,9 @@ void DecryptFile(std::ifstream& input, std::ofstream& output, const int& key)
 		output.put(static_cast<char>(byte));
 	}
 }
-
-int main(int argc, char* argv[]) //вывод ошибки под key
+//все считали из input? (input.bad())
+//вывод ошибки под key
+int main(int argc, char* argv[]) 
 {
 	auto arguments = ParseArguments(argc, argv);
 	if (arguments == std::nullopt)

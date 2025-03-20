@@ -3,9 +3,17 @@
 #include <iostream>
 #include <set>
 
-TEST_CASE("GeneratePrimeNumbersSet()")
+TEST_CASE("GeneratePrimeNumbersSet() - не пустое множество")
 {
-	CHECK(GeneratePrimeNumbersSet(10) == std::set<uint32_t>{ 2, 3, 5, 7 }); //не пустое множество
-	CHECK(GeneratePrimeNumbersSet(1) == std::set<uint32_t>{}); //пустое множество
-	CHECK(GeneratePrimeNumbersSet(100000000).size() == 5761455); // максимальное значение
+	CHECK(GeneratePrimeNumbersSet(10) == std::set<uint32_t>{ 2, 3, 5, 7 });
+}
+
+TEST_CASE("GeneratePrimeNumbersSet() - пустое множество")
+{
+	CHECK(GeneratePrimeNumbersSet(1) == std::set<uint32_t>{});
+}
+
+TEST_CASE("GeneratePrimeNumbersSet() - максимальное значение")
+{
+	CHECK(GeneratePrimeNumbersSet(100000000).size() == 5761455);
 }
