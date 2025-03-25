@@ -5,128 +5,103 @@
 
 TEST_CASE("ParseURL() - Invalid URL")
 {
-	Protocol protocol{};
-	std::string host{};
-	std::string document{};
-	int port{};
+	Url url{};
 
-	CHECK(!ParseURL("asdas", protocol, port, host, document)); //неверная строка
+	CHECK(!ParseURL("asdas", url)); //неверная строка
 
-	CHECK(!ParseURL("abc://example.com:8080/index.html", protocol, port, host, document)); //неверный протокол
+	CHECK(!ParseURL("abc://example.com:8080/index.html", url)); //неверный протокол
 
-	CHECK(!ParseURL("://example.com:8080/index.html", protocol, port, host, document)); // нет протокола
+	CHECK(!ParseURL("://example.com:8080/index.html", url)); // нет протокола
 
-	CHECK(!ParseURL("httpexample.com:8080/index.html", protocol, port, host, document)); // нет ://
+	CHECK(!ParseURL("httpexample.com:8080/index.html", url)); // нет ://
 
-	CHECK(!ParseURL("http://example.com:asd/index.html", protocol, port, host, document)); // в порте буквы
+	CHECK(!ParseURL("http://example.com:asd/index.html", url)); // в порте буквы
 
-	CHECK(!ParseURL("http://example.com:0/index.html", protocol, port, host, document)); // порт < 1
+	CHECK(!ParseURL("http://example.com:0/index.html", url)); // порт < 1
 
-	CHECK(!ParseURL("http://example.com:65536/index.html", protocol, port, host, document)); // порт > 65535
+	CHECK(!ParseURL("http://example.com:65536/index.html", url)); // порт > 65535
 }
 
 TEST_CASE("ParseURL() - Valid URL without port and docs")
 {
-	Protocol protocol{};
-	std::string host{};
-	std::string document{};
-	int port{};
+	Url url{};
 
 	//без порта и документов
-	CHECK(ParseURL("http://example.com", protocol, port, host, document));
-	CHECK(protocol == Protocol::HTTP);
-	CHECK(port == 80);
-	CHECK(host == "example.com");
-	CHECK(document == "");
-	
+	CHECK(ParseURL("http://example.com", url));
+	CHECK(url.protocol == Protocol::HTTP);
+	CHECK(url.port == 80);
+	CHECK(url.host == "example.com");
+	CHECK(url.document == "");
 }
 
 TEST_CASE("ParseURL() - Valid URL with port and docs")
 {
-	Protocol protocol{};
-	std::string host{};
-	std::string document{};
-	int port{};
+	Url url{};
 
 	//с портом и документом
-	CHECK(ParseURL("htTp://example.com:8080/index.html", protocol, port, host, document));
-	CHECK(protocol == Protocol::HTTP);
-	CHECK(port == 8080);
-	CHECK(host == "example.com");
-	CHECK(document == "index.html");
+	CHECK(ParseURL("htTp://example.com:8080/index.html", url));
+	CHECK(url.protocol == Protocol::HTTP);
+	CHECK(url.port == 8080);
+	CHECK(url.host == "example.com");
+	CHECK(url.document == "index.html");
 }
 
 TEST_CASE("ParseURL() - Valid URL big port")
 {
-	Protocol protocol{};
-	std::string host{};
-	std::string document{};
-	int port{};
+	Url url{};
 
 	//большой порт
-	CHECK(ParseURL("http://www.mysite.com/docs/document1.html?page=30&lang=en#title", protocol, port, host, document));
-	CHECK(protocol == Protocol::HTTP);
-	CHECK(port == 80);
-	CHECK(host == "www.mysite.com");
-	CHECK(document == "docs/document1.html?page=30&lang=en#title");
+	CHECK(ParseURL("http://www.mysite.com/docs/document1.html?page=30&lang=en#title", url));
+	CHECK(url.protocol == Protocol::HTTP);
+	CHECK(url.port == 80);
+	CHECK(url.host == "www.mysite.com");
+	CHECK(url.document == "docs/document1.html?page=30&lang=en#title");
 }
 
 TEST_CASE("ParseURL() - Valid URL with port and without docs")
 {
-	Protocol protocol{};
-	std::string host{};
-	std::string document{};
-	int port{};
+	Url url{};
 
 	//с портом и без доков
-	CHECK(ParseURL("http://example.com:8080", protocol, port, host, document));
-	CHECK(protocol == Protocol::HTTP);
-	CHECK(port == 8080);
-	CHECK(host == "example.com");
-	CHECK(document == "");
+	CHECK(ParseURL("http://example.com:8080", url));
+	CHECK(url.protocol == Protocol::HTTP);
+	CHECK(url.port == 8080);
+	CHECK(url.host == "example.com");
+	CHECK(url.document == "");
 }
 
 TEST_CASE("ParseURL() - Valid URL without port and with docs")
 {
-	Protocol protocol{};
-	std::string host{};
-	std::string document{};
-	int port{};
+	Url url{};
 
 	//без портов и с докоами
-	CHECK(ParseURL("http://example.com/docs", protocol, port, host, document));
-	CHECK(protocol == Protocol::HTTP);
-	CHECK(port == 80);
-	CHECK(host == "example.com");
-	CHECK(document == "docs");
+	CHECK(ParseURL("http://example.com/docs", url));
+	CHECK(url.protocol == Protocol::HTTP);
+	CHECK(url.port == 80);
+	CHECK(url.host == "example.com");
+	CHECK(url.document == "docs");
 }
 
 TEST_CASE("ParseURL() - Valid URL https")
 {
-	Protocol protocol{};
-	std::string host{};
-	std::string document{};
-	int port{};
+	Url url{};
 
 	//https
-	CHECK(ParseURL("https://example.com/docs", protocol, port, host, document));
-	CHECK(protocol == Protocol::HTTPS);
-	CHECK(port == 443);
-	CHECK(host == "example.com");
-	CHECK(document == "docs");
+	CHECK(ParseURL("https://example.com/docs", url));
+	CHECK(url.protocol == Protocol::HTTPS);
+	CHECK(url.port == 443);
+	CHECK(url.host == "example.com");
+	CHECK(url.document == "docs");
 }
 
 TEST_CASE("ParseURL() - Valid URL ftp")
 {
-	Protocol protocol{};
-	std::string host{};
-	std::string document{};
-	int port{};
+	Url url{};
 
 	//ftp
-	CHECK(ParseURL("ftp://example.com/docs", protocol, port, host, document));
-	CHECK(protocol == Protocol::FTP);
-	CHECK(port == 21);
-	CHECK(host == "example.com");
-	CHECK(document == "docs");
+	CHECK(ParseURL("ftp://example.com/docs", url));
+	CHECK(url.protocol == Protocol::FTP);
+	CHECK(url.port == 21);
+	CHECK(url.host == "example.com");
+	CHECK(url.document == "docs");
 }

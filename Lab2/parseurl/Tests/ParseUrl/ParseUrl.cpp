@@ -1,42 +1,39 @@
-Ôªø#include "ParseUrl.h"
+#include "ParseUrl.h" 
 #include <iostream>
+#include <map>
 #include <regex>
 #include <stdexcept>
 #include <string>
 
-bool IsValidProtocol(std::string& protocolString, Protocol& protocol, int& port)
+//map protol, struct, init protocol
+
+const std::map<std::string, std::pair<Protocol, int>> PROTOCOLS{
+	{ "http", { Protocol::HTTP, 80 } },
+	{ "https", { Protocol::HTTPS, 443 } },
+	{ "ftp", { Protocol::FTP, 21 } }
+};
+const int MAX_PORT_VALUE = 65535;
+const int MIN_PORT_VALUE = 1;
+
+void InitProtocol(const std::string& protocolString, Url& url)
 {
-	std::transform(protocolString.begin(), protocolString.end(), protocolString.begin(), tolower);
 
-	if (protocolString == "http") //map, struct, init protocol
+	for (auto protocol : PROTOCOLS)
 	{
-		protocol = Protocol::HTTP;
-		port = 80;
+		if (protocolString == protocol.first)
+		{
+			url.protocol = protocol.second.first;
+			url.port = protocol.second.second;
+		}
 	}
-	else if (protocolString == "https")
-	{
-		protocol = Protocol::HTTPS;
-		port = 443;
-	}
-	else if (protocolString == "ftp")
-	{
-		protocol = Protocol::FTP;
-		port = 21;
-	}
-	else
-	{
-		return false;
-	}
-
-	return true;
 }
 
-bool IsValidPort(const std::string& portString, int& port)
+bool InitPort(const std::string& portString, int& port)
 {
 	try
 	{
 		port = std::stoi(portString);
-		if (port < 1 || port > 65535) //const –≤—ã–Ω–µ—Å—Ç–∏
+		if (port < MIN_PORT_VALUE || port > MAX_PORT_VALUE) //const ‚˚ÌÂÒ
 		{
 			return false;
 		}
@@ -53,13 +50,13 @@ bool IsValidPort(const std::string& portString, int& port)
 	return true;
 }
 
-bool ParseURL(const std::string& url, Protocol& protocol, int& port, std::string& host, std::string& document)
+bool ParseURL(const std::string& urlString, Url& url)
 {
 	std::regex urlPattern(R"(^(http|https|ftp)://([^/:]+)(:(\d+))?(/.*)?$)");
 	std::smatch match{};
 
-	std::string lowerCaseUrl = url;
-	std::transform(lowerCaseUrl.begin(), lowerCaseUrl.end(), lowerCaseUrl.begin(), tolower); //lowercaseurl to all func
+	std::string lowerCaseUrl = urlString;
+	std::transform(lowerCaseUrl.begin(), lowerCaseUrl.end(), lowerCaseUrl.begin(), tolower);
 
 	if (!std::regex_match(lowerCaseUrl, match, urlPattern))
 	{
@@ -67,16 +64,13 @@ bool ParseURL(const std::string& url, Protocol& protocol, int& port, std::string
 	}
 
 	std::string protocolString = match[1].str();
-	if (!IsValidProtocol(protocolString, protocol, port))
-	{
-		return false;
-	}
+	InitProtocol(protocolString, url);
 
-	host = match[2].str();
+	url.host = match[2].str();
 
 	if (match[3].matched)
 	{
-		if (!match[4].str().empty() && !IsValidPort(match[4].str(), port))
+		if (!match[4].str().empty() && !InitPort(match[4].str(), url.port))
 		{
 			return false;
 		}
@@ -84,41 +78,12 @@ bool ParseURL(const std::string& url, Protocol& protocol, int& port, std::string
 
 	if (match[5].matched)
 	{
-		document = match[5].str().substr(1);
+		url.document = match[5].str().substr(1);
 	}
 	else
 	{
-		document = "";
+		url.document = "";
 	}
 
 	return true;
 }
-
-#ifndef UNIT_TEST
-
-int main()
-{
-	std::string url;
-	std::getline(std::cin, url);
-
-	Protocol protocol;
-	int port;
-	std::string host;
-	std::string document;
-
-	if (ParseURL(url, protocol, port, host, document))
-	{
-		std::cout << url << "\n";
-		std::cout << "HOST: " << host << "\n";
-		std::cout << "PORT: " << port << "\n";
-		std::cout << "DOC: " << document << "\n";
-	}
-	else
-	{
-		std::cout << "ERROR" << "\n";
-	}
-
-	return 0;
-}
-
-#endif
