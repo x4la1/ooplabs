@@ -6,9 +6,12 @@
 #include <vector>
 #include <chrono>
 
-void PrintUsage() //help
+const uint32_t MAX_UPPER_BOUND = 100000000;
+const uint32_t MIN_UPPER_BOUND = 0; 
+
+void PrintHelp() //help
 {
-	std::cout << "Usage: Primes.exe <upper bound>\n";
+	std::cout << "Usage: Primes.exe <upper bound> (0 - 100000000)\n";
 }
 
 void PrintSet(std::set<uint32_t> numbers)
@@ -19,38 +22,49 @@ void PrintSet(std::set<uint32_t> numbers)
 	}
 }
 
+bool IsValidUpperBound(const std::string& upperBoundString) //вынес
+{
+
+	uint32_t upperBound{};
+	try
+	{
+		upperBound = std::stoi(upperBoundString);
+	}
+	catch (std::invalid_argument& e)
+	{
+		return false;
+	}
+	catch (std::out_of_range& e)
+	{
+		return false;
+	}
+
+	if (upperBound > MAX_UPPER_BOUND || upperBound < MIN_UPPER_BOUND)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+
 #ifndef UNIT_TEST
 
 int main(int argc, char* argv[]) 
 {
 	if (argc != 2)
 	{
-		PrintUsage();
+		PrintHelp();
 		return 1;
 	}
 
-	uint32_t upperBound{}; //valid вынести
-	try
+	if (!IsValidUpperBound(std::string(argv[1])))
 	{
-		upperBound = std::stoi(argv[1]);
-	}
-	catch (std::invalid_argument& e)
-	{
-		PrintUsage();
-		return 1;
-	}
-	catch (std::out_of_range& e)
-	{
-		std::cout << "Upper bound exceeds the max value\n";
+		PrintHelp();
 		return 1;
 	}
 
-	if (upperBound > 100000000 || upperBound < 0)
-	{
-		std::cout << "Upper bound must be in range 0-100000000\n";
-		return 1;
-	}
-
+	uint32_t upperBound = std::stoi(argv[1]); 
 
 	auto start = std::chrono::high_resolution_clock::now();
 	std::set<uint32_t> primeNumbers = GeneratePrimeNumbersSet(upperBound);
