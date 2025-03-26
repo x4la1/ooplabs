@@ -62,8 +62,8 @@ void ExitProgram(const size_t& pairsCount, const Dictionary& dictionary, const s
 
 void SetupConsoleCP()
 {
-	SetConsoleCP(1251);
-	SetConsoleOutputCP(1251);
+	SetConsoleCP(CP_UTF8);
+	SetConsoleOutputCP(CP_UTF8);
 }
 
 #ifndef UNIT_TEST
