@@ -1,4 +1,5 @@
 ﻿The Red Square: Красная площадь
+ale ale: але але
 ball: мяч
 bye: пока
 cat: кот, кошка

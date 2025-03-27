@@ -23,8 +23,7 @@ int main()
 	}
 	else
 	{
-		std::cout << "ERROR"
-				  << "\n";
+		std::cout << "ERROR\n";
 	}
 
 	return 0;

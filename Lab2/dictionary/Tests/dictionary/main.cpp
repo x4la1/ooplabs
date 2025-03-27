@@ -66,9 +66,56 @@ void SetupConsoleCP()
 	SetConsoleOutputCP(CP_UTF8);
 }
 
+void RunProgram(Dictionary& dictionary, const std::string& filename)
+{
+	std::string word{};
+	std::string translatedWord{};
+	std::string line{};
+	std::string letter{};
+	size_t pairsCount = dictionary.size();
+	while (true)
+	{
+		std::getline(std::cin, word);
+		if (word == "...")
+		{
+			ExitProgram(pairsCount, dictionary, filename);
+			break;
+		}
+
+		if (word.empty())
+		{
+			continue;
+		}
+
+		if (FindWordInDictionary(dictionary, word, translatedWord))
+		{
+			std::cout << translatedWord << "\n";
+		}
+		else
+		{
+			std::cout << "Неизвестное слово \"" << word << "\". Введите перевод или пустую строку для отказа.\n";
+			std::getline(std::cin, line);
+			if (line == "...")
+			{
+				ExitProgram(pairsCount, dictionary, filename);
+				break;
+			}
+			if (line.empty())
+			{
+				std::cout << "Слово \"" << word << "\"проигнорировано.\n";
+				continue;
+			}
+			else
+			{
+				AddWordInDictionary(dictionary, word, line);
+			}
+		}
+	}
+}
+
 #ifndef UNIT_TEST
 
-int main(int argv, char* argc[])
+int main(int argv, char* argc[]) // raspil
 {
 	SetupConsoleCP();
 	auto filename = ParseArguments(argv, argc);
@@ -98,8 +145,7 @@ int main(int argv, char* argc[])
 			return 1;
 		}
 	}
-
-	if (!filename.has_value())
+	else
 	{
 		filename = "dictionary.txt";
 	}
@@ -109,49 +155,9 @@ int main(int argv, char* argc[])
 		std::cout << item.first << " " << item.second << "\n";
 	}
 
-	std::string word{};
-	std::string translatedWord{};
-	std::string line{};
-	std::string letter{};
-	size_t pairsCount = dictionary.size();
-	while (true)
-	{
-		std::getline(std::cin, word);
-		if (word == "...")
-		{
-			ExitProgram(pairsCount, dictionary, filename.value());
-			return 0;
-		}
+	RunProgram(dictionary, filename.value());
 
-		if (word.empty())
-		{
-			continue;
-		}
-
-		if (FindWordInDictionary(dictionary, word, translatedWord))
-		{
-			std::cout << translatedWord << "\n";
-		}
-		else
-		{
-			std::cout << "Неизвестное слово \"" << word << "\". Введите перевод или пустую строку для отказа.\n";
-			std::getline(std::cin, line);
-			if (line == "...")
-			{
-				ExitProgram(pairsCount, dictionary, filename.value());
-				return 0;
-			}
-			if (line.empty())
-			{
-				std::cout << "Слово \"" << word << "\"проигнорировано.\n";
-				continue;
-			}
-			else
-			{
-				AddWordInDictionary(dictionary, word, line);
-			}
-		}
-	}
+	return 0;
 }
 
 #endif

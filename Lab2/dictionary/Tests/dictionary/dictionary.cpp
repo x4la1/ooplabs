@@ -16,7 +16,7 @@ using Pairs = std::vector<std::pair<std::string, std::string>>;
 
 std::string Trim(const std::string& str)
 {
-	size_t start = str.find_first_not_of(" ");
+	size_t start = str.find_first_not_of(" \n\t\r");
 	if (start == std::string::npos)
 	{
 		return "";
@@ -78,7 +78,6 @@ void AddWordInDictionary(Dictionary& dictionary, const std::string& word, const 
 {
 	dictionary.insert(make_pair(word, translate));
 }
-
 
 bool FindWordInDictionary(const Dictionary& dictionary, const std::string& word, std::string& translatedWord)
 {
