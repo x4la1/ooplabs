@@ -11,7 +11,7 @@ std::vector<Token> TokenizeExpression(const std::string& expression)
 {
 	std::vector<Token> tokens{};
 
-	for (size_t i = 0; i < expression.size(); ++i)
+	for (size_t i = 0; i < expression.size(); ++i) //while тк меняем i
 	{
 		if (isspace(expression.at(i)))
 		{
@@ -35,7 +35,7 @@ std::vector<Token> TokenizeExpression(const std::string& expression)
 				endNumberPosition++;
 			}
 
-			int number = std::stoi(expression.substr(i, endNumberPosition - i));
+			int number = std::stoi(expression.substr(i, endNumberPosition - i)); //записывать в строку
 			tokens.push_back({ false, ' ', number });
 			i = endNumberPosition - 1;
 		}
@@ -66,11 +66,11 @@ int CalculateSubExpression(const char& operand, const int& argsCount, std::stack
 	{
 		for (int j = 0; j < argsCount; ++j)
 		{
-			if (operand == '+')
+			if (operand == '+') //else if или switch оптом throw
 			{
 				result += values.top();
 			}
-			else
+			else 
 			{
 				result *= values.top();
 			}
@@ -81,16 +81,16 @@ int CalculateSubExpression(const char& operand, const int& argsCount, std::stack
 	return result;
 }
 
-int CalculateExpression(const std::string& expression)
+int CalculateExpression(const std::string& expression) // стек токеном при ) идем с верху вниз пока не нейдем операнд и потом вычисляем и суем в стек
 {
 	std::vector<Token> tokens = TokenizeExpression(expression);
 	std::stack<int> values{};
 	std::stack<char> operands{};
 	std::stack<int> argumentsCount{};
 
-	for (size_t i = 0; i < tokens.size(); ++i)
+	for (size_t i = 0; i < tokens.size(); ++i) //просто стэк токенов
 	{
-		if (tokens.at(i).isOperand && tokens.at(i).operand == '(')
+		if (tokens.at(i).isOperand && tokens.at(i).operand == '(') //проверка на операнд
 		{
 			i++;
 			operands.push(tokens.at(i).operand);

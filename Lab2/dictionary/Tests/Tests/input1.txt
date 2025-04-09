@@ -1,1 +1,11 @@
+<<<<<<< HEAD
 ﻿ball: мяч
+=======
+﻿The Red Square: Красная площадь
+ale ale: але але
+ball: мяч
+bye: пока
+cat: кот, кошка
+hello: привет
+meat: мясо
+>>>>>>> 149197f8e28b2a82d46b535aa49286d3a609d9d1

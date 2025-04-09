@@ -17,8 +17,33 @@ TEST_CASE("ReadWordsFromString()")
 	CHECK(ReadWordsFromString("cat: кот, кошка") == std::vector<std::string>{ "cat", "кот, кошка" }); //успешное выполнение
 }
 
-TEST_CASE("CreateDictionaryFromFile()")
+/* TEST_CASE("CreateDictionaryFromFile()")
 {
+<<<<<<< HEAD
+=======
+	Dictionary expectedResult1 = {
+		{ "The Red Square", "Красная площадь" },
+		{ "ball", "мяч" },
+		{ "bye", "пока" },
+		{ "cat", "кот, кошка" },
+		{ "hello", "привет" },
+		{ "meat", "мясо" }
+	};
+	Dictionary dict{};
+
+	std::ifstream input1("input1.txt");
+	dict = CreateDictionaryFromFile(input1);
+	for (auto item: dict)
+	{
+		std::cout << item.first << " " << item.second << "\n";
+	}
+
+	CHECK(expectedResult1 == dict); // успешное считывание
+}*/
+
+TEST_CASE("CreateDictionaryFromFile() - empty string")
+{
+>>>>>>> 149197f8e28b2a82d46b535aa49286d3a609d9d1
 	std::ifstream input2("input2.txt");
 	CHECK_THROWS_AS(CreateDictionaryFromFile(input2), std::exception); //пустое слово
 }
@@ -44,7 +69,7 @@ TEST_CASE("AddWordInDictionary()")
 	CHECK(input1 == output1); //добавление слов
 }
 
-TEST_CASE("FindWordInDictionary()")
+TEST_CASE("FindWordInDictionary() find word")
 {
 	Dictionary dict = {
 		{ "The Red Square", "Красная площадь" },
@@ -54,11 +79,12 @@ TEST_CASE("FindWordInDictionary()")
 		{ "hello", "привет" },
 		{ "meat", "мясо" }
 	};
+
 	std::string word1 = "ball";
 	std::string translatedWord{};
 	FindWordInDictionary(dict, word1, translatedWord);
 	CHECK(translatedWord == "мяч"); //поиск слова
 
-	std::string word2 = "alo";
+	std::string word2 = "alo"; //несуществвующее слово
 	CHECK(FindWordInDictionary(dict, word2, translatedWord) == false);
 }

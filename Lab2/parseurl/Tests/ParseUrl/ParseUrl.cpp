@@ -33,7 +33,7 @@ bool InitPort(const std::string& portString, int& port)
 	try
 	{
 		port = std::stoi(portString);
-		if (port < MIN_PORT_VALUE || port > MAX_PORT_VALUE) //const вынес
+		if (port < MIN_PORT_VALUE || port > MAX_PORT_VALUE) //const пїЅпїЅпїЅпїЅпїЅ
 		{
 			return false;
 		}
@@ -50,7 +50,42 @@ bool InitPort(const std::string& portString, int& port)
 	return true;
 }
 
-bool ParseURL(const std::string& urlString, Url& url)
+void ParseProtocol(const std::smatch& match, Url& url)
+{
+	InitProtocol(match[1].str(), url);
+}
+
+void ParseDocument(const std::smatch& match, Url& url)
+{
+	if (match[5].matched)
+	{
+		url.document = match[5].str().substr(1);
+	}
+	else
+	{
+		url.document = "";
+	}
+}
+
+void ParseHost(const std::smatch& match, Url& url)
+{
+	url.host = match[2].str();
+}
+
+bool ParsePort(std::smatch& match, Url& url)
+{
+	if (match[3].matched)
+	{
+		if (!match[4].str().empty() && !InitPort(match[4].str(), url.port))
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool ParseURL(const std::string& urlString, Url& url) //raspil РЅР° parse protocol Рё С‚Рґ
 {
 	std::regex urlPattern(R"(^(http|https|ftp)://([^/:]+)(:(\d+))?(/.*)?$)");
 	std::smatch match{};
@@ -63,27 +98,13 @@ bool ParseURL(const std::string& urlString, Url& url)
 		return false;
 	}
 
-	std::string protocolString = match[1].str();
-	InitProtocol(protocolString, url);
-
-	url.host = match[2].str();
-
-	if (match[3].matched)
+	ParseProtocol(match, url);
+	ParseHost(match, url);
+	if (!ParsePort(match, url))
 	{
-		if (!match[4].str().empty() && !InitPort(match[4].str(), url.port))
-		{
-			return false;
-		}
+		return false;
 	}
-
-	if (match[5].matched)
-	{
-		url.document = match[5].str().substr(1);
-	}
-	else
-	{
-		url.document = "";
-	}
-
+	ParseDocument(match, url);
+	
 	return true;
 }

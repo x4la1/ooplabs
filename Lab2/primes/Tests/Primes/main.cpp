@@ -7,7 +7,7 @@
 #include <chrono>
 
 const uint32_t MAX_UPPER_BOUND = 100000000;
-const uint32_t MIN_UPPER_BOUND = 0; 
+const uint32_t MIN_UPPER_BOUND = 0;
 
 void PrintHelp() //help
 {

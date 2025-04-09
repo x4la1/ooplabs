@@ -66,14 +66,21 @@ void SetupConsoleCP()
 	SetConsoleOutputCP(CP_UTF8);
 }
 
+<<<<<<< HEAD
 void RunProgram(Dictionary& dictionary, const std::string filename)
+=======
+void RunProgram(Dictionary& dictionary, const std::string& filename)
+>>>>>>> 149197f8e28b2a82d46b535aa49286d3a609d9d1
 {
 	std::string word{};
 	std::string translatedWord{};
 	std::string line{};
 	std::string letter{};
 	size_t pairsCount = dictionary.size();
+<<<<<<< HEAD
 	SetupConsoleCP();
+=======
+>>>>>>> 149197f8e28b2a82d46b535aa49286d3a609d9d1
 	while (true)
 	{
 		std::getline(std::cin, word);
@@ -116,7 +123,7 @@ void RunProgram(Dictionary& dictionary, const std::string filename)
 
 #ifndef UNIT_TEST
 
-int main(int argv, char* argc[])
+int main(int argv, char* argc[]) // raspil
 {
 	auto filename = ParseArguments(argv, argc);
 	if (filename == std::nullopt)
