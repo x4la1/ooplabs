@@ -1,6 +1,1 @@
-﻿The Red Square: Красная площадь
-ball: мяч
-bye: пока
-cat: кот, кошка
-hello: привет
-meat: мясо
+﻿ball: мяч

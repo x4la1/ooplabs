@@ -16,7 +16,7 @@ using Pairs = std::vector<std::pair<std::string, std::string>>;
 
 std::string Trim(const std::string& str)
 {
-	size_t start = str.find_first_not_of(" ");
+	size_t start = str.find_first_not_of(" \t\n\r");
 	if (start == std::string::npos)
 	{
 		return "";
@@ -45,6 +45,7 @@ std::vector<std::string> ReadWordsFromString(const std::string& line)
 	{
 		throw std::exception("Invalid string");
 	}
+
 	return wordsList;
 }
 
