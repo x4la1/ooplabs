@@ -18,7 +18,7 @@ Circle::Circle(const Point& center, const double& radius, const uint32_t& outlin
 		throw std::invalid_argument("Ñolors must be in range #000000-#ffffff\n");
 	}
 
-	m_center = center;
+	m_center = Point(center.GetX(), m_windowsHeight - center.GetY());
 	m_radius = radius;
 	m_outlineColor = outlineColor;
 	m_fillColor = fillColor;
@@ -35,7 +35,7 @@ double Circle::GetPerimeter() const
 }
 std::string Circle::ToString() const
 {
-	return "";
+	return "Circle";
 }
 
 Point Circle::GetCenter() const
@@ -50,6 +50,6 @@ double Circle::GetRadius() const
 
 void Circle::Draw(ICanvas& canvas) const
 {
-	canvas.DrawCircle(m_center, m_radius, m_outlineColor);
 	canvas.FillCircle(m_center, m_radius, m_fillColor);
+	canvas.DrawCircle(m_center, m_radius, m_outlineColor);
 }

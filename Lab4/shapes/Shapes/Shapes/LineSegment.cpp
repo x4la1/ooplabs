@@ -13,6 +13,8 @@ LineSegment::LineSegment(const Point& startPoint, const Point& endPoint, const u
 		throw std::invalid_argument("Ñolors must be in range #000000-#ffffff\n");
 	}
 
+	m_startPoint = Point(startPoint.GetX(), m_windowsHeight - startPoint.GetY());
+	m_endPoint = Point(endPoint.GetX(), m_windowsHeight - endPoint.GetY());
 	m_outlineColor = outlineColor;
 }
 
@@ -28,7 +30,7 @@ double LineSegment::GetPerimeter() const
 
 std::string LineSegment::ToString() const
 {
-	return "";
+	return "LineSegment";
 }
 Point LineSegment::GetStartPoint() const
 {

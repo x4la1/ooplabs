@@ -13,9 +13,9 @@ Triangle::Triangle(const Point& point1, const Point& point2, const Point& point3
 		throw std::invalid_argument("Ñolors must be in range #000000-#ffffff\n");
 	}
 
-	m_vertex1 = point1;
-	m_vertex2 = point2;
-	m_vertex3 = point3;
+	m_vertex1 = Point(point1.GetX(), m_windowsHeight - point1.GetY());
+	m_vertex2 = Point(point2.GetX(), m_windowsHeight - point2.GetY());
+	m_vertex3 = Point(point3.GetX(), m_windowsHeight - point3.GetY());
 	m_outlineColor = outlineColor;
 	m_fillColor = fillColor;
 }
@@ -56,13 +56,13 @@ Point Triangle::GetVertex3() const
 
 std::string Triangle::ToString() const
 {
-	return "";
+	return "Triangle";
 }
 
 void Triangle::Draw(ICanvas& canvas) const
 {
+	canvas.FillPolygon(std::vector<Point>{ m_vertex1, m_vertex2, m_vertex3 }, m_fillColor);
 	canvas.DrawLine(m_vertex1, m_vertex2, m_outlineColor);
 	canvas.DrawLine(m_vertex2, m_vertex3, m_outlineColor);
 	canvas.DrawLine(m_vertex3, m_vertex1, m_outlineColor);
-	canvas.FillPolygon(std::vector<Point>{ m_vertex1, m_vertex2, m_vertex3 }, m_fillColor);
 }

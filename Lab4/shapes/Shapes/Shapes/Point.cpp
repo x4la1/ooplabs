@@ -2,9 +2,9 @@
 
 Point::Point(const double& ox, const double& oy)
 {
-	if (ox < 0 || oy < 0)
+	if (ox < 0 || oy < 0 || ox > 1000 || oy > 1000)
 	{
-		throw std::invalid_argument("x and y must be more than 0");
+		throw std::invalid_argument("x and y must be in range 0 - 1000");
 	}
 
 	m_x = ox;
