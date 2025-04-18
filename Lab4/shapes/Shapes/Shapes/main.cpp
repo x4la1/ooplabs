@@ -2,7 +2,7 @@
 #include "Circle.h"
 #include "LineSegment.h"
 #include "Rectangle.h"
-#include "Shape.h"
+#include "IShape.h"
 #include "Triangle.h"
 #include <SFML/Graphics.hpp>
 #include <iomanip>
@@ -12,7 +12,7 @@
 
 const std::map<std::string, int> SHAPES_CODES = { { "LineSegment", 1 }, { "Circle", 2 }, { "Rectangle", 3 }, { "Triangle", 4 } };
 
-bool ReadAndAddShape(int code, std::vector<Shape*>& shapes)
+bool ReadAndAddShape(int code, std::vector<IShape*>& shapes, std::vector<ICanvasDrawable*>& drawableShapes)
 {
 	double x1, x2, x3, y1, y2, y3, radius;
 	uint32_t outlineColor, fillColor{};
@@ -25,6 +25,7 @@ bool ReadAndAddShape(int code, std::vector<Shape*>& shapes)
 			if (std::cin >> x1 >> y1 >> x2 >> y2 >> std::hex >> outlineColor)
 			{
 				shapes.push_back(new LineSegment(Point(x1, y1), Point(x2, y2), outlineColor));
+				drawableShapes.push_back(new LineSegment(Point(x1, y1), Point(x2, y2), outlineColor));
 				break;
 			}
 			return false;
@@ -33,6 +34,7 @@ bool ReadAndAddShape(int code, std::vector<Shape*>& shapes)
 			if (std::cin >> x1 >> y1 >> radius >> std::hex >> outlineColor >> std::hex >> fillColor)
 			{
 				shapes.push_back(new Circle(Point(x1, y1), radius, outlineColor, fillColor));
+				drawableShapes.push_back(new Circle(Point(x1, y1), radius, outlineColor, fillColor));
 				break;
 			}
 			return false;
@@ -41,6 +43,7 @@ bool ReadAndAddShape(int code, std::vector<Shape*>& shapes)
 			if (std::cin >> x1 >> y1 >> x2 >> y2 >> std::hex >> outlineColor >> std::hex >> fillColor)
 			{
 				shapes.push_back(new Rectangle(Point(x1, y1), Point(x2, y2), outlineColor, fillColor));
+				drawableShapes.push_back(new Rectangle(Point(x1, y1), Point(x2, y2), outlineColor, fillColor));
 				break;
 			}
 			return false;
@@ -48,6 +51,7 @@ bool ReadAndAddShape(int code, std::vector<Shape*>& shapes)
 			if (std::cin >> x1 >> y1 >> x2 >> y2 >> x3 >> y3 >> std::hex >> outlineColor >> std::hex >> fillColor)
 			{
 				shapes.push_back(new Triangle(Point(x1, y1), Point(x2, y2), Point(x3, y3), outlineColor, fillColor));
+				drawableShapes.push_back(new Triangle(Point(x1, y1), Point(x2, y2), Point(x3, y3), outlineColor, fillColor));
 				break;
 			}
 			return false;
@@ -63,7 +67,7 @@ bool ReadAndAddShape(int code, std::vector<Shape*>& shapes)
 	}
 }
 
-size_t FindShapeIndexWithMaxArea(std::vector<Shape*> shapes)
+size_t FindShapeIndexWithMaxArea(std::vector<IShape*> shapes)
 {
 	size_t indexMaxAreaShape = 0;
 	for (size_t i = 1; i < shapes.size(); ++i)
@@ -77,7 +81,7 @@ size_t FindShapeIndexWithMaxArea(std::vector<Shape*> shapes)
 	return indexMaxAreaShape;
 }
 
-size_t FindShapeIndexWithMaxPerimeter(std::vector<Shape*> shapes)
+size_t FindShapeIndexWithMaxPerimeter(std::vector<IShape*> shapes)
 {
 	size_t indexMaxPerimeterShape = 0;
 	for (size_t i = 1; i < shapes.size(); ++i)
@@ -91,7 +95,7 @@ size_t FindShapeIndexWithMaxPerimeter(std::vector<Shape*> shapes)
 	return indexMaxPerimeterShape;
 }
 
-void DrawShapes(std::vector<Shape*> shapes)
+void DrawShapes(std::vector<ICanvasDrawable*> shapes)
 {
 	sf::RenderWindow window(sf::VideoMode(1000, 1000), "test");
 	Canvas canvas(window);
@@ -116,7 +120,7 @@ void DrawShapes(std::vector<Shape*> shapes)
 	}
 }
 
-void PrintMaxShapes(std::vector<Shape*> shapes)
+void PrintMaxShapes(std::vector<IShape*> shapes)
 {
 	if (shapes.size() == 0)
 	{
@@ -125,8 +129,8 @@ void PrintMaxShapes(std::vector<Shape*> shapes)
 
 	size_t indexMaxAreaShape = FindShapeIndexWithMaxArea(shapes);
 	size_t indexMaxPerimeterShape = FindShapeIndexWithMaxPerimeter(shapes);
-	SolidShape* solidShape1 = dynamic_cast<SolidShape*>(shapes.at(indexMaxAreaShape));
-	SolidShape* solidShape2 = dynamic_cast<SolidShape*>(shapes.at(indexMaxPerimeterShape));
+	ISolidShape* solidShape1 = dynamic_cast<ISolidShape*>(shapes.at(indexMaxAreaShape));
+	ISolidShape* solidShape2 = dynamic_cast<ISolidShape*>(shapes.at(indexMaxPerimeterShape));
 
 	std::cout << "Max area shape: " << shapes.at(indexMaxAreaShape)->ToString() << "\n"
 			  << "Area: " << std::fixed << std::setprecision(3) << shapes.at(indexMaxAreaShape)->GetArea() << "\n"
@@ -153,7 +157,8 @@ void PrintMaxShapes(std::vector<Shape*> shapes)
 
 int main()
 {
-	std::vector<Shape*> shapes{};
+	std::vector<IShape*> shapes{};
+	std::vector<ICanvasDrawable*> drawableShapes{}; 
 	std::string shapeName{};
 
 	while (!std::cin.eof())
@@ -167,7 +172,7 @@ int main()
 				continue;
 			}
 
-			if (!ReadAndAddShape(it->second, shapes))
+			if (!ReadAndAddShape(it->second, shapes, drawableShapes))
 			{
 				std::cout << "Error\n";
 			}
@@ -181,7 +186,7 @@ int main()
 	Rectangle rec(Point(300, 300), Point(400, 500), 0x000000, 0x777777);
 	Triangle triangle(Point(500, 200), Point(700, 200), Point(600, 100), 0x000000, 0x777777);*/
 
-	DrawShapes(shapes);
+	DrawShapes(drawableShapes);
 
 	return 0;
 }

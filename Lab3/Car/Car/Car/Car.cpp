@@ -1,4 +1,4 @@
-#include "Car.h"
+ï»¿#include "Car.h"
 
 int Car::GetSpeed() const
 {
@@ -67,7 +67,7 @@ bool Car::SetGear(const int& gear)
 
 	if (!m_isEngineTurnedOn && gear != 0)
 	{
-		std::cout << "Ñannot set gear while engine is off\n";
+		std::cout << "Cannot set gear while engine is off\n";
 		return false;
 	}
 
@@ -88,7 +88,7 @@ bool Car::SetGear(const int& gear)
 		return false;
 	}
 
-	if (m_speed < GEAR_SPEED_RANGES.at(gear).first || m_speed > GEAR_SPEED_RANGES.at(gear).second)
+	if (m_speed < m_gearSpeedRanges.at(gear).first || m_speed > m_gearSpeedRanges.at(gear).second)
 	{
 		std::cout << "Unsuitable current speed\n";
 		return false;
@@ -129,7 +129,7 @@ bool Car::SetSpeed(const int& speed)
 		return false;
 	}
 
-	if (speed < GEAR_SPEED_RANGES.at(m_gear).first || speed > GEAR_SPEED_RANGES.at(m_gear).second)
+	if (speed < m_gearSpeedRanges.at(m_gear).first || speed > m_gearSpeedRanges.at(m_gear).second)
 	{
 		std::cout << "Speed is out of gear range\n";
 		return false;

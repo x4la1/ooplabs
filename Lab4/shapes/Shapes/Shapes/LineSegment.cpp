@@ -10,11 +10,11 @@ LineSegment::LineSegment(const Point& startPoint, const Point& endPoint, const u
 
 	if (outlineColor > 0xffffff)
 	{
-		throw std::invalid_argument("Ñolors must be in range #000000-#ffffff\n");
+		throw std::invalid_argument("ï¿½olors must be in range #000000-#ffffff\n");
 	}
 
-	m_startPoint = Point(startPoint.GetX(), m_windowsHeight - startPoint.GetY());
-	m_endPoint = Point(endPoint.GetX(), m_windowsHeight - endPoint.GetY());
+	m_startPoint = startPoint;
+	m_endPoint = endPoint;
 	m_outlineColor = outlineColor;
 }
 
@@ -44,4 +44,9 @@ Point LineSegment::GetEndPoint() const
 void LineSegment::Draw(ICanvas& canvas) const
 {
 	canvas.DrawLine(m_startPoint, m_endPoint, m_outlineColor);
+}
+
+uint32_t LineSegment::GetOutlineColor() const
+{
+	return m_outlineColor;
 }

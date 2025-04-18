@@ -149,8 +149,6 @@
   <ItemGroup>
     <ClCompile Include="..\Shapes\Point.cpp" />
     <ClCompile Include="..\Shapes\Rectangle.cpp" />
-    <ClCompile Include="..\Shapes\Shape.cpp" />
-    <ClCompile Include="..\Shapes\SolidShape.cpp" />
     <ClCompile Include="catch.cpp" />
     <ClCompile Include="Rectangle tests.cpp" />
   </ItemGroup>
@@ -158,8 +156,8 @@
     <ClInclude Include="..\Shapes\ICanvasDrawable.h" />
     <ClInclude Include="..\Shapes\Point.h" />
     <ClInclude Include="..\Shapes\Rectangle.h" />
-    <ClInclude Include="..\Shapes\Shape.h" />
-    <ClInclude Include="..\Shapes\SolidShape.h" />
+    <ClInclude Include="..\Shapes\IShape.h" />
+    <ClInclude Include="..\Shapes\ISolidShape.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

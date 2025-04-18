@@ -1,14 +1,5 @@
-#include <map>
 #include <iostream>
-const std::map<int, std::pair<int, int>> GEAR_SPEED_RANGES = { //занести в класс
-	{ -1, { 0, 20 } },
-	{ 0, { 0, 150 } },
-	{ 1, { 0, 30 } },
-	{ 2, { 20, 50 } },
-	{ 3, { 30, 60 } },
-	{ 4, { 40, 90 } },
-	{ 5, { 50, 150 } }
-};
+#include <map>
 
 enum class Direction
 {
@@ -37,4 +28,13 @@ private:
 	int m_gear;
 	bool m_isEngineTurnedOn;
 	Direction m_direction;
+	const std::map<int, std::pair<int, int>> m_gearSpeedRanges = {
+		{ -1, { 0, 20 } },
+		{ 0, { 0, 150 } },
+		{ 1, { 0, 30 } },
+		{ 2, { 20, 50 } },
+		{ 3, { 30, 60 } },
+		{ 4, { 40, 90 } },
+		{ 5, { 50, 150 } }
+	};
 };

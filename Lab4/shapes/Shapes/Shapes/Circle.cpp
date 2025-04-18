@@ -10,18 +10,28 @@ Circle::Circle(const Point& center, const double& radius, const uint32_t& outlin
 
 	if ((center.GetX() - radius) <= 0 || (center.GetY() - radius) <= 0)
 	{
-		throw std::invalid_argument("Ñircle must be within the positive coordinate axes.");
+		throw std::invalid_argument("Circle must be within the positive coordinate axes.");
 	}
 
 	if (outlineColor > 0xffffff || fillColor > 0xffffff)
 	{
-		throw std::invalid_argument("Ñolors must be in range #000000-#ffffff\n");
+		throw std::invalid_argument("Colors must be in range #000000-#ffffff\n");
 	}
 
-	m_center = Point(center.GetX(), m_windowsHeight - center.GetY());
+	m_center = center;
 	m_radius = radius;
 	m_outlineColor = outlineColor;
 	m_fillColor = fillColor;
+}
+
+uint32_t Circle::GetOutlineColor() const
+{
+	return m_outlineColor;
+}
+
+uint32_t Circle::GetFillColor() const
+{
+	return m_fillColor;
 }
 
 double Circle::GetArea() const

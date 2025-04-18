@@ -1,5 +1,5 @@
 ﻿#include "Shapes/Shapes/Circle.h"
-#include "catch2/catch.hpp"
+#include "catch2/catch.hpp" //добавиьт тест на получение максимальной площади и периметра
 #include <numbers>
 
 TEST_CASE("Circle() radius == 0")

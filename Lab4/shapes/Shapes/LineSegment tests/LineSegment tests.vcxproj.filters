@@ -27,9 +27,6 @@
     <ClCompile Include="..\Shapes\Point.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="..\Shapes\Shape.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Shapes\LineSegment.h">
@@ -38,7 +35,7 @@
     <ClInclude Include="..\Shapes\Point.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="..\Shapes\Shape.h">
+    <ClInclude Include="..\Shapes\IShape.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="..\Shapes\ICanvasDrawable.h">

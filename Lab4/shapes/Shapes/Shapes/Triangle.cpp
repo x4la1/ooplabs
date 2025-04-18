@@ -10,14 +10,24 @@ Triangle::Triangle(const Point& point1, const Point& point2, const Point& point3
 
 	if (outlineColor > 0xffffff || fillColor > 0xffffff)
 	{
-		throw std::invalid_argument("Ñolors must be in range #000000-#ffffff\n");
+		throw std::invalid_argument("ï¿½olors must be in range #000000-#ffffff\n");
 	}
 
-	m_vertex1 = Point(point1.GetX(), m_windowsHeight - point1.GetY());
-	m_vertex2 = Point(point2.GetX(), m_windowsHeight - point2.GetY());
-	m_vertex3 = Point(point3.GetX(), m_windowsHeight - point3.GetY());
+	m_vertex1 = point1;
+	m_vertex2 = point2;
+	m_vertex3 = point3;
 	m_outlineColor = outlineColor;
 	m_fillColor = fillColor;
+}
+
+uint32_t Triangle::GetOutlineColor() const
+{
+	return m_outlineColor;
+}
+
+uint32_t Triangle::GetFillColor() const
+{
+	return m_fillColor;
 }
 
 double Triangle::GetArea() const
@@ -37,6 +47,11 @@ bool Triangle::IsValidPoints(const Point& point1, const Point& point2, const Poi
 	}
 
 	return true;
+}
+
+double Triangle::GetDistanceBetween(const Point& point1, const Point& point2) const
+{
+	return (std::sqrt(std::pow((point2.GetX() - point1.GetX()), 2) + std::pow((point2.GetY() - point1.GetY()), 2)));
 }
 
 Point Triangle::GetVertex1() const

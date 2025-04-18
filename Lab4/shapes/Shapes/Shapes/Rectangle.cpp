@@ -1,21 +1,36 @@
 #include "Rectangle.h"
+#include <cmath>
 
-Rectangle::Rectangle(const Point& leftBottomPoint, const Point& rightTopPoint, const uint32_t& outlineColor, const uint32_t& fillColor)
+Rectangle::Rectangle(const Point& leftTopPoint, const Point& rightBottomPoint, const uint32_t& outlineColor, const uint32_t& fillColor)
 {
-	if (leftBottomPoint.GetX() >= rightTopPoint.GetX() || leftBottomPoint.GetY() >= rightTopPoint.GetY())
+	if (leftTopPoint.GetX() >= rightBottomPoint.GetX() || leftTopPoint.GetY() <= rightBottomPoint.GetY())
 	{
-		throw std::exception("Invalid rectangle\n");
+		throw std::invalid_argument("Invalid rectangle\n");
 	}
 
-	if (outlineColor > 0xffffff || fillColor > 0xffffff)
+	if (outlineColor > 0xffffff || fillColor > 0xffffff || outlineColor < 0x000000 || fillColor < 0x000000)
 	{
-		throw std::invalid_argument("Ñolors must be in range #000000-#ffffff\n");
+		throw std::invalid_argument("Colors must be in range #000000-#ffffff\n");
 	}
 
-	m_leftBottomPoint = Point(leftBottomPoint.GetX(), m_windowsHeight - leftBottomPoint.GetY());
-	m_rightTopPoint = Point(rightTopPoint.GetX(), m_windowsHeight - rightTopPoint.GetY());
+	m_leftTopPoint = leftTopPoint;
+	m_rightBottomPoint = rightBottomPoint; 
 	m_outlineColor = outlineColor;
 	m_fillColor = fillColor;
+}
+
+uint32_t Rectangle::GetFillColor() const
+{
+	return m_fillColor;
+}
+uint32_t Rectangle::GetOutlineColor() const
+{
+	return m_outlineColor;
+}
+
+double Rectangle::GetDistanceBetween(const Point& point1, const Point& point2) const
+{
+	return (std::sqrt(std::pow((point2.GetY() - point1.GetY()), 2) + std::pow((point2.GetX() - point1.GetX()), 2)));
 }
 
 double Rectangle::GetArea() const
@@ -35,30 +50,30 @@ std::string Rectangle::ToString() const
 
 Point Rectangle::GetLeftTop() const
 {
-	return m_leftBottomPoint;
+	return m_leftTopPoint;
 }
 
 Point Rectangle::GetRightBottom() const
 {
-	return m_rightTopPoint;
+	return m_rightBottomPoint;
 }
 
 double Rectangle::GetWidth() const
 {
-	return m_rightTopPoint.GetX() - m_leftBottomPoint.GetX();
+	return m_rightBottomPoint.GetX() - m_leftTopPoint.GetX();
 }
 
 double Rectangle::GetHeight() const
 {
-	return m_leftBottomPoint.GetY() - m_rightTopPoint.GetY();
+	return m_leftTopPoint.GetY() - m_rightBottomPoint.GetY();
 }
 
 void Rectangle::Draw(ICanvas& canvas) const
 {
-	Point point1 = m_leftBottomPoint;
-	Point point2(m_rightTopPoint.GetX(), m_leftBottomPoint.GetY());
-	Point point3 = m_rightTopPoint;
-	Point point4(m_leftBottomPoint.GetX(), m_rightTopPoint.GetY());
+	Point point1 = m_leftTopPoint;
+	Point point2(m_rightBottomPoint.GetX(), m_leftTopPoint.GetY());
+	Point point3 = m_rightBottomPoint;
+	Point point4(m_leftTopPoint.GetX(), m_rightBottomPoint.GetY());
 	canvas.FillPolygon(std::vector<Point>{ point1, point2, point3, point4 }, m_fillColor);
 	canvas.DrawLine(point1, point2, m_outlineColor);
 	canvas.DrawLine(point2, point3, m_outlineColor);
