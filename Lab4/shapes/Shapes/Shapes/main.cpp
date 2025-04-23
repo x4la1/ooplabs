@@ -16,6 +16,7 @@ bool ReadAndAddShape(int code, std::vector<IShape*>& shapes, std::vector<ICanvas
 {
 	double x1, x2, x3, y1, y2, y3, radius;
 	uint32_t outlineColor, fillColor{};
+
 	try
 	{
 
