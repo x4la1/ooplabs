@@ -1,11 +1,11 @@
 ﻿#include "catch2/catch.hpp"
-#include "Calculator/Calculator/Calculator.h"
 #include <sstream>
 #include <iostream>
+#include "Calculator/Calculator/Controller.h"
 
 TEST_CASE("Unknown command")
 {
-	Calculator calc;
+	Controller calc;
 	CHECK_THROWS_AS(calc.HandleCommand("asd x"), std::invalid_argument);
 }
 
@@ -15,7 +15,7 @@ TEST_CASE("Var - valid")
 	std::stringstream ss;
 	std::cout.rdbuf(ss.rdbuf());
 
-	Calculator calc;
+	Controller calc;
 	calc.HandleCommand("var x");
 	calc.HandleCommand("print x");
 
@@ -30,7 +30,7 @@ TEST_CASE("Var - valid with diff symbols")
 	std::stringstream ss;
 	std::cout.rdbuf(ss.rdbuf());
 
-	Calculator calc;
+	Controller calc;
 	calc.HandleCommand("var x123_asd2_111");
 	calc.HandleCommand("print x123_asd2_111");
 
@@ -41,32 +41,32 @@ TEST_CASE("Var - valid with diff symbols")
 
 TEST_CASE("Var - invalid name")
 {
-	Calculator calc;
+	Controller calc;
 	CHECK_THROWS_AS(calc.HandleCommand("var 1x"), std::invalid_argument);
 }
 
 TEST_CASE("let - invalid identifier")
 {
-	Calculator calc;
+	Controller calc;
 	CHECK_THROWS_AS(calc.HandleCommand("let 1x = 1"), std::invalid_argument);
 }
 
 TEST_CASE("let - unknown variable")
 {
-	Calculator calc;
+	Controller calc;
 	CHECK_THROWS_AS(calc.HandleCommand("let x = a"), std::invalid_argument);
 }
 
 TEST_CASE("let - identifier already exist")
 {
-	Calculator calc;
+	Controller calc;
 	calc.HandleCommand("var x");
 	CHECK_THROWS_AS(calc.HandleCommand("let x = a"), std::invalid_argument);
 }
 
 TEST_CASE("let - out of range")
 {
-	Calculator calc;
+	Controller calc;
 	CHECK_THROWS_AS(calc.HandleCommand("let x = 999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999"), std::out_of_range);
 }
 
@@ -76,7 +76,7 @@ TEST_CASE("let - valid let = double, not exist")
 	std::stringstream ss;
 	std::cout.rdbuf(ss.rdbuf());
 
-	Calculator calc;
+	Controller calc;
 	calc.HandleCommand("let x = 4.5");
 	calc.HandleCommand("print x");
 
@@ -91,7 +91,7 @@ TEST_CASE("let - valid let = variable")
 	std::stringstream ss;
 	std::cout.rdbuf(ss.rdbuf());
 
-	Calculator calc;
+	Controller calc;
 	calc.HandleCommand("let y = 13.37");
 	calc.HandleCommand("let x = y");
 	calc.HandleCommand("print x");
@@ -107,7 +107,7 @@ TEST_CASE("let - valid let = double, exist")
 	std::stringstream ss;
 	std::cout.rdbuf(ss.rdbuf());
 
-	Calculator calc;
+	Controller calc;
 	calc.HandleCommand("var y");
 	calc.HandleCommand("let y = 36.6");
 	calc.HandleCommand("print y");
@@ -117,13 +117,30 @@ TEST_CASE("let - valid let = double, exist")
 	CHECK(out == "y:36.600\n");
 }
 
+TEST_CASE("let - valid let = fn")
+{
+	std::streambuf* oldCout = std::cout.rdbuf();
+	std::stringstream ss;
+	std::cout.rdbuf(ss.rdbuf());
+
+	Controller calc;
+	calc.HandleCommand("let y = 5");
+	calc.HandleCommand("fn dy = y*y");
+	calc.HandleCommand("let x = dy");
+	calc.HandleCommand("print x");
+
+	std::string out = ss.str();
+	std::cout.rdbuf(oldCout);
+	CHECK(out == "x:25.000\n");
+}
+
 TEST_CASE("let - valid let = variable(nan)")
 {
 	std::streambuf* oldCout = std::cout.rdbuf();
 	std::stringstream ss;
 	std::cout.rdbuf(ss.rdbuf());
 
-	Calculator calc;
+	Controller calc;
 	calc.HandleCommand("var y");
 	calc.HandleCommand("let x = y");
 	calc.HandleCommand("print x");
@@ -135,34 +152,34 @@ TEST_CASE("let - valid let = variable(nan)")
 
 TEST_CASE("fn - invalid name")
 {
-	Calculator calc;
+	Controller calc;
 	calc.HandleCommand("var x");
 	CHECK_THROWS_AS(calc.HandleCommand("fn 1asd = x"), std::invalid_argument);
 }
 
 TEST_CASE("fn - identifier already exist")
 {
-	Calculator calc;
+	Controller calc;
 	calc.HandleCommand("var x");
 	CHECK_THROWS_AS(calc.HandleCommand("fn x = x"), std::invalid_argument);
 }
 
 TEST_CASE("fn -  operand not exist")
 {
-	Calculator calc;
+	Controller calc;
 	CHECK_THROWS_AS(calc.HandleCommand("fn x = y"), std::invalid_argument);
 }
 
 TEST_CASE("fn - second operand not exist")
 {
-	Calculator calc;
+	Controller calc;
 	calc.HandleCommand("var x");
 	CHECK_THROWS_AS(calc.HandleCommand("fn a = x + y"), std::invalid_argument);
 }
 
 TEST_CASE("fn - invalid operation")
 {
-	Calculator calc;
+	Controller calc;
 	calc.HandleCommand("var x");
 	calc.HandleCommand("var y");
 	CHECK_THROWS_AS(calc.HandleCommand("fn a = x ^ y"), std::invalid_argument);
@@ -174,7 +191,7 @@ TEST_CASE("fn - valid + ")
 	std::stringstream ss;
 	std::cout.rdbuf(ss.rdbuf());
 
-	Calculator calc;
+	Controller calc;
 	calc.HandleCommand("let x = 5.2");
 	calc.HandleCommand("let y = 4.8");
 	calc.HandleCommand("fn XPlusY = x+ y");
@@ -191,7 +208,7 @@ TEST_CASE("fn - valid - ")
 	std::stringstream ss;
 	std::cout.rdbuf(ss.rdbuf());
 
-	Calculator calc;
+	Controller calc;
 	calc.HandleCommand("let x = 5.2");
 	calc.HandleCommand("let y = 4.8");
 	calc.HandleCommand("fn XPlusY = x- y");
@@ -208,7 +225,7 @@ TEST_CASE("fn - valid * ")
 	std::stringstream ss;
 	std::cout.rdbuf(ss.rdbuf());
 
-	Calculator calc;
+	Controller calc;
 	calc.HandleCommand("let x = 3.5");
 	calc.HandleCommand("let y = 2");
 	calc.HandleCommand("fn XPlusY =x* y");
@@ -225,7 +242,7 @@ TEST_CASE("fn - valid / ")
 	std::stringstream ss;
 	std::cout.rdbuf(ss.rdbuf());
 
-	Calculator calc;
+	Controller calc;
 	calc.HandleCommand("let x = 7");
 	calc.HandleCommand("let y = 2");
 	calc.HandleCommand("fn XPlusY =x/ y");
@@ -242,7 +259,7 @@ TEST_CASE("fn - valid divided by 0 ")
 	std::stringstream ss;
 	std::cout.rdbuf(ss.rdbuf());
 
-	Calculator calc;
+	Controller calc;
 	calc.HandleCommand("let x = 7");
 	calc.HandleCommand("let y = 0");
 	calc.HandleCommand("fn XPlusY =x/ y");
@@ -259,7 +276,7 @@ TEST_CASE("fn - valid + nan")
 	std::stringstream ss;
 	std::cout.rdbuf(ss.rdbuf());
 
-	Calculator calc;
+	Controller calc;
 	calc.HandleCommand("var x");
 	calc.HandleCommand("let y = 5");
 	calc.HandleCommand("fn XPlusY =x+ y");
@@ -276,7 +293,7 @@ TEST_CASE("fn - valid - nan")
 	std::stringstream ss;
 	std::cout.rdbuf(ss.rdbuf());
 
-	Calculator calc;
+	Controller calc;
 	calc.HandleCommand("var x");
 	calc.HandleCommand("let y = 5");
 	calc.HandleCommand("fn XPlusY =x- y");
@@ -293,7 +310,7 @@ TEST_CASE("fn - valid * nan")
 	std::stringstream ss;
 	std::cout.rdbuf(ss.rdbuf());
 
-	Calculator calc;
+	Controller calc;
 	calc.HandleCommand("var x");
 	calc.HandleCommand("let y = 5");
 	calc.HandleCommand("fn XPlusY =x* y");
@@ -310,7 +327,7 @@ TEST_CASE("fn - valid / nan")
 	std::stringstream ss;
 	std::cout.rdbuf(ss.rdbuf());
 
-	Calculator calc;
+	Controller calc;
 	calc.HandleCommand("var x");
 	calc.HandleCommand("let y = 5");
 	calc.HandleCommand("fn XPlusY =x/ y");
@@ -327,7 +344,7 @@ TEST_CASE("fn - valid 1 operand is function")
 	std::stringstream ss;
 	std::cout.rdbuf(ss.rdbuf());
 
-	Calculator calc;
+	Controller calc;
 	calc.HandleCommand("let x = 5");
 	calc.HandleCommand("let y = 5");
 	calc.HandleCommand("let z = 2");
@@ -346,7 +363,7 @@ TEST_CASE("fn - valid 2 operand is function")
 	std::stringstream ss;
 	std::cout.rdbuf(ss.rdbuf());
 
-	Calculator calc;
+	Controller calc;
 	calc.HandleCommand("let x = 5");
 	calc.HandleCommand("let y = 5");
 	calc.HandleCommand("let z = 2");
@@ -366,7 +383,7 @@ TEST_CASE("printvars")
 	std::stringstream ss;
 	std::cout.rdbuf(ss.rdbuf());
 
-	Calculator calc;
+	Controller calc;
 	calc.HandleCommand("let x = -5");
 	calc.HandleCommand("let y = x");
 	calc.HandleCommand("var z");
@@ -383,7 +400,7 @@ TEST_CASE("printfns + alphabet")
 	std::stringstream ss;
 	std::cout.rdbuf(ss.rdbuf());
 
-	Calculator calc;
+	Controller calc;
 	calc.HandleCommand("let x = 5");
 	calc.HandleCommand("let y = 5");
 	calc.HandleCommand("let z = 2");

@@ -5,73 +5,10 @@
 #include <map>
 #include <optional>
 #include <memory>
+//unique_ptr
 
-const std::map<std::string, uint32_t> COMMAND_CODES = {
-		{"var", 1},
-		{"let", 2},
-		{"fn", 3},
-		{"print", 4},
-		{"printvars", 5},
-		{"printfns", 6}
-};
-
-void Calculator::HandleCommand(const std::string& line)
+void Calculator::CreateVar(const std::string& identifier)
 {
-	std::string command, restLine;
-	size_t spacePosition = line.find(' ');
-
-	if (spacePosition != std::string::npos) {
-		command = line.substr(0, spacePosition);
-		restLine = line.substr(spacePosition + 1);
-	}
-	else {
-		command = line;
-	}
-
-	uint32_t code;
-	auto result = COMMAND_CODES.find(command);
-	if (result == COMMAND_CODES.end())
-	{
-		throw std::invalid_argument("Unknown command\n");
-	}
-	code = result->second;
-
-	switch (code)
-	{
-	case 1:
-		HandleVar(restLine);
-		break;
-	case 2:
-		HandleLet(restLine);
-		break;
-	case 3:
-		HandleFunction(restLine);
-		break;
-	case 4:
-		Print(restLine);
-		break;
-	case 5:
-		PrintVars();
-		break;
-	case 6:
-		PrintFunctions();
-		break;
-	default:
-		break;
-	}
-}
-
-void Calculator::HandleVar(const std::string& restLine)
-{
-	const std::regex varRegex(R"(^([a-zA-Z_]\w*)$)");
-	std::string line = DeleteSpaces(restLine);
-
-	std::smatch match;
-	if (!std::regex_match(line, match, varRegex))
-	{
-		throw std::invalid_argument("Invalid usage\n");
-	}
-	std::string identifier = match[1].str();
 
 	if (IsIdentifierExist(identifier))
 	{
@@ -82,32 +19,9 @@ void Calculator::HandleVar(const std::string& restLine)
 	m_variables.insert(std::make_pair(variable->m_name, variable));
 }
 
-void Calculator::HandleLet(const std::string& restLine)
+
+void Calculator::LetVariableWithNumber(const std::string& identifier, const double& value)
 {
-	std::string line = DeleteSpaces(restLine);
-	const std::regex letDouble(R"(^([a-zA-Z_]\w*)=([-]?(0|[1-9]\d*)(\.\d+)?)\s*$)");
-	const std::regex letVariable(R"(^([a-zA-Z_]\w*)=([a-zA-Z_]\w*)$)");
-
-	std::smatch match;
-	if (std::regex_match(line, match, letDouble))
-	{
-		ProcessLetWithNumber(match);
-	}
-	else if (std::regex_match(line, match, letVariable))
-	{
-		ProcessLetWithVariable(match);
-	}
-	else
-	{
-		throw std::invalid_argument("Invalid usage\n");
-	}
-
-}
-
-void Calculator::ProcessLetWithNumber(const std::smatch& match)
-{
-	std::string identifier = match[1];
-	double value = std::stod(match[2]);
 	std::optional<std::shared_ptr<Variable>> foundedVariable = FindVariable(identifier);
 
 	if (foundedVariable != std::nullopt)
@@ -116,7 +30,7 @@ void Calculator::ProcessLetWithNumber(const std::smatch& match)
 		return;
 	}
 
-	if (IsIdentifierExist(identifier))
+	if (IsIdentifierExist(identifier)) //isfunctionexist
 	{
 		throw std::invalid_argument("Name already exists\n");
 	}
@@ -126,62 +40,51 @@ void Calculator::ProcessLetWithNumber(const std::smatch& match)
 	m_variables.insert(std::make_pair(identifier, variable));
 }
 
-void Calculator::ProcessLetWithVariable(const std::smatch& match)
+void Calculator::LetVariableWithVariable(const std::string& identifier1, const std::string& identifier2)
 {
-	std::string identifier1 = match[1];
-	std::string identifier2 = match[2];
 	std::optional<std::shared_ptr<Variable>> foundedVariable1 = FindVariable(identifier1);
 	std::optional<std::shared_ptr<Variable>> foundedVariable2 = FindVariable(identifier2);
+	std::optional<std::shared_ptr<Function>> foundedFunction2 = FindFunction(identifier2);
 
-	if (foundedVariable2 == std::nullopt)
+	if (foundedVariable2 == std::nullopt && foundedFunction2 == std::nullopt)
 	{
 		throw std::invalid_argument("Name does not exist\n");
 	}
 
-	if (foundedVariable1 != std::nullopt)
+	if (foundedVariable1 != std::nullopt) //has_value()
 	{
-		foundedVariable1.value()->m_value = foundedVariable2.value()->m_value;
+		if (foundedVariable2.has_value())
+		{
+			foundedVariable1.value()->m_value = foundedVariable2.value()->m_value;
+		}
+		else
+		{
+			foundedVariable1.value()->m_value = GetFunctionResult(foundedFunction2.value());
+		}
+
 		return;
 	}
 
-	if (IsIdentifierExist(identifier1))
+	if (IsIdentifierExist(identifier1)) //IsFunctionexist
 	{
 		throw std::invalid_argument("Name already exists\n");
 	}
 
 	std::shared_ptr<Variable> variable(new Variable(identifier1));
-	variable->m_value = foundedVariable2.value()->m_value;
-	m_variables.insert(std::make_pair(variable->m_name, variable));
-}
-
-void Calculator::HandleFunction(const std::string& restLine)
-{
-	std::string line = DeleteSpaces(restLine);
-	std::smatch match;
-	const std::regex unaryFunctionRegex(R"(^([a-zA-Z_]\w*)=([a-zA-Z_]\w*)$)");
-	const std::regex binaryFunctionRegex(R"(^([a-zA-Z_]\w*)=([a-zA-Z_]\w*)([+\-*/])([a-zA-Z_]\w*)$)");
-
-	if (std::regex_match(line, match, unaryFunctionRegex))
+	if (foundedVariable2.has_value())
 	{
-		ProcessUnaryFunction(match);
-	}
-	else if (std::regex_match(line, match, binaryFunctionRegex))
-	{
-		ProcessBinaryFunction(match);
+		variable->m_value = foundedVariable2.value()->m_value;
 	}
 	else
 	{
-		throw std::invalid_argument("Invalid usage\n");
+		variable->m_value = GetFunctionResult(foundedFunction2.value());
 	}
 
+	m_variables.insert(std::make_pair(variable->m_name, variable));
 }
 
-void Calculator::ProcessBinaryFunction(const std::smatch& match)
+void Calculator::CreateBinaryFunction(const std::string& identifier1, const std::string& identifier2, const std::string& operation, const std::string& identifier3)
 {
-	std::string identifier1 = match[1];
-	std::string identifier2 = match[2];
-	std::string identifier3 = match[4];
-	std::string operation = match[3];
 	std::optional<std::shared_ptr<Variable>> foundedVariable1 = FindVariable(identifier2);
 	std::optional<std::shared_ptr<Function>> foundedFunction1 = FindFunction(identifier2);
 	std::optional<std::shared_ptr<Variable>> foundedVariable2 = FindVariable(identifier3);
@@ -193,7 +96,7 @@ void Calculator::ProcessBinaryFunction(const std::smatch& match)
 	{
 		throw std::invalid_argument("Name does not exist\n");
 	}
-
+	//find identificator
 	if (foundedFunction1 != std::nullopt)
 	{
 		leftOperandName = foundedFunction1.value()->m_name;
@@ -215,13 +118,11 @@ void Calculator::ProcessBinaryFunction(const std::smatch& match)
 	m_functions.insert(std::make_pair(identifier1, (new Function(identifier1, leftOperandName, operation, rightOperandName))));
 }
 
-void Calculator::ProcessUnaryFunction(const std::smatch& match)
+void Calculator::CreateUnaryFunction(const std::string& identifier1, const std::string& identifier2)
 {
-	std::string identifier1 = match[1];
-	std::string identifier2 = match[2];
 	std::optional<std::shared_ptr<Variable>> foundedVariable = FindVariable(identifier2);
 	std::optional<std::shared_ptr<Function>> foundedFunction = FindFunction(identifier2);
-
+	//is identifier exist
 	if (foundedVariable == std::nullopt && foundedFunction == std::nullopt)
 	{
 		throw std::invalid_argument("Name does not exist\n");
@@ -232,7 +133,7 @@ void Calculator::ProcessUnaryFunction(const std::smatch& match)
 		throw std::invalid_argument("Name already exists\n");
 	}
 
-	if (foundedFunction != nullptr)
+	if (foundedFunction != std::nullopt)
 	{
 		m_functions.insert(std::make_pair(identifier1, std::shared_ptr<Function>(new Function(identifier1, foundedFunction.value()->m_name))));
 	}
@@ -258,7 +159,7 @@ double Calculator::GetFunctionResult(std::shared_ptr<Function>& function)
 	{
 		leftValue = foundedVariable1.value()->m_value;
 	}
-	else if(!foundedVariable1.has_value())
+	else if (!foundedVariable1.has_value())
 	{
 		leftValue = GetFunctionResult(foundedFunction1.value());
 	}
@@ -279,13 +180,13 @@ double Calculator::GetFunctionResult(std::shared_ptr<Function>& function)
 	{
 		rightValue = GetFunctionResult(foundedFunction2.value());
 	}
-	
+
 
 	if (leftValue == NAN_VALUE || rightValue == NAN_VALUE)
 	{
 		return NAN_VALUE;
 	}
-	
+
 	return Calculate(leftValue, rightValue, function->m_operation);
 }
 
@@ -311,7 +212,7 @@ double Calculator::Calculate(const double& leftValue, const double& rightValue, 
 }
 
 std::optional<std::shared_ptr<Function>> Calculator::FindFunction(const std::string& name)
-{
+{//get?
 	for (auto functions : m_functions)
 	{
 		if (functions.first == name)
@@ -387,20 +288,6 @@ bool Calculator::IsIdentifierExist(const std::string& variableName) const
 	}
 
 	return false;
-}
-
-std::string Calculator::DeleteSpaces(const std::string& line) const
-{
-	std::string stringWithoutSpaces;
-	for (char ch : line)
-	{
-		if (!isspace(ch))
-		{
-			stringWithoutSpaces.push_back(ch);
-		}
-	}
-
-	return stringWithoutSpaces;
 }
 
 std::optional<std::shared_ptr<Variable>> Calculator::FindVariable(const std::string& name)

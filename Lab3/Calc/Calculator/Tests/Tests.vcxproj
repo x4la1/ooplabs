@@ -148,6 +148,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Calculator\Calculator.cpp" />
+    <ClCompile Include="..\Calculator\Controller.cpp" />
     <ClCompile Include="..\Calculator\Function.cpp" />
     <ClCompile Include="..\Calculator\Variable.cpp" />
     <ClCompile Include="catch.cpp" />
@@ -155,6 +156,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Calculator\Calculator.h" />
+    <ClInclude Include="..\Calculator\Controller.h" />
     <ClInclude Include="..\Calculator\Function.h" />
     <ClInclude Include="..\Calculator\Variable.h" />
   </ItemGroup>

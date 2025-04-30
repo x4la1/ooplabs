@@ -1,10 +1,10 @@
 ﻿#include <iostream>
 #include <string>
-#include "Calculator.h"
+#include "Controller.h"
 
 int main()
 {
-	Calculator calc;
+	Controller calc;
 	std::string line;
 	while (std::getline(std::cin, line))
 	{

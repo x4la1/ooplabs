@@ -144,12 +144,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Calculator.cpp" />
+    <ClCompile Include="Controller.cpp" />
     <ClCompile Include="Function.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Variable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Calculator.h" />
+    <ClInclude Include="Controller.h" />
     <ClInclude Include="Function.h" />
     <ClInclude Include="Variable.h" />
   </ItemGroup>

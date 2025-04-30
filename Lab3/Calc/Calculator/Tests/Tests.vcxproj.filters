@@ -30,6 +30,9 @@
     <ClCompile Include="..\Calculator\Variable.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="..\Calculator\Controller.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Calculator\Calculator.h">
@@ -39,6 +42,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="..\Calculator\Variable.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Calculator\Controller.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
