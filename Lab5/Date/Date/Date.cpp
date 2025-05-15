@@ -33,7 +33,6 @@ CDate::CDate()
 
 uint32_t CDate::GetDay() const
 {
-
 	uint32_t year = GetYear();
 	uint32_t daysLeft = m_timestamp - YearToTimestamp(year);
 	uint32_t daysInMonth;
@@ -82,7 +81,7 @@ WeekDay CDate::GetWeekDay() const
 
 bool CDate::IsValidDate(const uint32_t& day, const Month& month, const uint32_t& year) const
 {
-	if (year < 1970 || year > 9999)
+	if (year < 1970 || year > 9999) //const
 	{
 		return false;
 	}
@@ -138,7 +137,7 @@ bool CDate::IsLeapYear(const uint32_t& year) const
 
 uint32_t CDate::TimestampToYear(const uint32_t& timestamp) const
 {
-	uint32_t years = timestamp / 365;
+	uint32_t years = timestamp / 365; //const
 	uint32_t testYear = s_timestampStartYear + years;
 	uint32_t days = YearToTimestamp(testYear);
 
@@ -149,7 +148,7 @@ uint32_t CDate::TimestampToYear(const uint32_t& timestamp) const
 		days = YearToTimestamp(testYear);
 	}
 
-	return 1970 + years;
+	return 1970 + years; //const
 }
 
 uint32_t CDate::YearToTimestamp(const uint32_t& year) const
@@ -273,7 +272,7 @@ std::istream& operator>>(std::istream& is, CDate& date)
 	std::string line;
 	std::getline(is, line);
 
-	std::regex dateRegex("^([0-2][0-9]|3[0-1])\\.(0[1-9]|1[0-2])\\.(19[7-9][0-9]\\d{2}|[2-9]\\d{3})$");
+	std::regex dateRegex("^([0-2][0-9]|3[0-1])\\.(0[1-9]|1[0-2])\\.(19[7-9][0-9]\\d{2}|[2-9]\\d{3})$"); //const 2-9 0-9 0-9 0-9
 	std::smatch match;
 
 	if (!std::regex_match(line, match, dateRegex))
