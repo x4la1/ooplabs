@@ -30,12 +30,12 @@ TEST_CASE("Date(d,m,y) - invalid year < 1970")
 
 TEST_CASE("Date(d,m,y) - invalid month > 12")
 {
-	CHECK_THROWS_AS(CDate(1, static_cast<Month>(13), 1969), std::invalid_argument);
+	CHECK_THROWS_AS(CDate(1, static_cast<Month>(13), 1970), std::invalid_argument);
 }
 
 TEST_CASE("Date(d,m,y) - invalid month < 1")
 {
-	CHECK_THROWS_AS(CDate(1, static_cast<Month>(0), 1969), std::invalid_argument);
+	CHECK_THROWS_AS(CDate(1, static_cast<Month>(0), 1970), std::invalid_argument);
 }
 
 TEST_CASE("Convert to timestamp 1 leap year")

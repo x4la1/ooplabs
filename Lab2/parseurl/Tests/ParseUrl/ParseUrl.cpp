@@ -108,3 +108,8 @@ bool ParseURL(const std::string& urlString, Url& url) //raspil на parse protoc
 	
 	return true;
 }
+
+
+for()
+{
+	

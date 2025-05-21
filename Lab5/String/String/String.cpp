@@ -6,21 +6,8 @@
 char* CMyString::s_empty = new char('\0');
 CMyString::CMyString() :m_data{ s_empty }, m_length{ 0 }, m_capacity{ 0 } {}
 
-CMyString::CMyString(const char* pString)
-{
-	if (!pString || strlen(pString) == 0)
-	{
-		m_data = s_empty;
-		m_length = 0;
-		m_capacity = 0;
-		return;
-	}
-	m_length = strlen(pString);
-	m_capacity = m_length;
-	m_data = new char[m_length + 1];
-	std::copy(pString, pString + m_length, m_data);
-	m_data[m_length] = '\0';
-}
+CMyString::CMyString(const char* pString): CMyString(pString, strlen(pString))
+{}
 
 CMyString::CMyString(const char* pString, size_t length)
 {
@@ -40,23 +27,12 @@ CMyString::CMyString(const char* pString, size_t length)
 	m_data[length] = '\0';
 }
 
-CMyString::CMyString(CMyString const& other)
-{
-	if (other.m_data == s_empty)
-	{
-		m_data = s_empty;
-		m_length = 0;
-		m_capacity = 0;
-		return;
-	}
-	m_length = other.m_length;
-	m_capacity = other.m_capacity;
-	m_data = new char[m_length + 1];
-	std::copy(other.m_data, other.m_data + m_length + 1, m_data);
-}
+CMyString::CMyString(CMyString const& other): CMyString(other.GetStringData(), other.GetLength()) //как и 1 конструктор
+{}
 
-CMyString::CMyString(CMyString&& other) noexcept
+CMyString::CMyString(CMyString&& other) noexcept //std::swap()
 {
+
 	m_data = other.m_data;
 	m_length = other.m_length;
 	m_capacity = other.m_capacity;
@@ -65,26 +41,12 @@ CMyString::CMyString(CMyString&& other) noexcept
 	other.m_capacity = 0;
 }
 
-CMyString::CMyString(std::string const& stlString)
-{
-	m_length = stlString.length();
-	m_capacity = m_length;
-	if (m_length == 0)
-	{
-		m_data = s_empty;
-		return;
-	}
-	m_data = new char[m_length + 1];
-	std::copy(stlString.c_str(), stlString.c_str() + m_length, m_data);
-	m_data[m_length] = '\0';
-}
+CMyString::CMyString(std::string const& stlString): CMyString(stlString.c_str(), stlString.length()) //конструктор 2
+{}
 
-CMyString::~CMyString()
+CMyString::~CMyString() //clear
 {
-	if (m_data != s_empty)
-	{
-		delete[] m_data;
-	}
+	Clear();
 }
 
 size_t CMyString::GetLength()const
@@ -123,7 +85,7 @@ void CMyString::Clear()
 	m_capacity = 0;
 }
 
-CMyString& CMyString::operator=(const CMyString& other)
+CMyString& CMyString::operator=(const CMyString& other)//posmotretb
 {
 	if (this != &other)
 	{
@@ -153,7 +115,7 @@ CMyString& CMyString::operator=(CMyString&& other) noexcept
 		{
 			delete[] m_data;
 		}
-		m_data = other.m_data;
+		m_data = other.m_data; //std::swap()
 		m_length = other.m_length;
 		m_capacity = other.m_capacity;
 		other.m_data = s_empty;
@@ -183,7 +145,7 @@ CMyString& CMyString::operator+=(const CMyString& other)
 		m_data = newData;
 		m_capacity = newCapacity;
 	}
-	std::copy(other.m_data, other.m_data + other.m_length, m_data + m_length);
+	std::copy(other.m_data, other.m_data + other.m_length, m_data + m_length); //capacity*2
 	m_length = newLength;
 	m_data[m_length] = '\0';
 }
@@ -279,9 +241,9 @@ std::ostream& operator<<(std::ostream& os, const CMyString& str)
 
 std::istream& operator>>(std::istream& is, CMyString& str) 
 {
-	std::string line;
-	is >> line;
-	CMyString temp(line);
+	char buffer[255];
+	is >> buffer;
+	CMyString temp(buffer);
 	str = std::move(temp);
 	return is;
 }
