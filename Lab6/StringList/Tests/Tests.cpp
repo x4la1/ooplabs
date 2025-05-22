@@ -3,12 +3,16 @@
 #include <sstream>
 #include <iostream>
 #include <algorithm>
+//iterator++ --
+//print ss fun
+//перемещение себя
 
 TEST_CASE("CStringList() empty list")
 {
 	CStringList list1;
 	CHECK(list1.Empty());
 	CHECK(list1.Size() == 0);
+	
 }
 
 TEST_CASE("CStringList(const CStringList& other);")

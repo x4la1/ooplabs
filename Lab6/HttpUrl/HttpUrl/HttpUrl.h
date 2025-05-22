@@ -35,7 +35,7 @@ private:
 	void SetDefaultPort();
 	bool IsDefaultPort() const;
 	bool IsValidPort(const uint32_t& port) const;
-	void ParseAndInitUrl(const std::string& url);
+	void ParseAndInitUrl(const std::string& url); //suda
 
 	static const std::regex s_urlPattern;
 	static const std::map<Protocol, unsigned short> s_defaultPorts;
