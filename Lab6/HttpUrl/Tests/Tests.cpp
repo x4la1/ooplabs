@@ -119,7 +119,7 @@ TEST_CASE("HttpUrl(domain, document, protocol) - without protocol")
 	CHECK(url.GetURL() == "http://example.com/index.html");
 }
 
-TEST_CASE("HttpUrl(domain, document, protocol) - witprotocol")
+TEST_CASE("HttpUrl(domain, document, protocol) - with protocol")
 {
 	HttpUrl url("example.com", "index.html", Protocol::HTTPS);
 	CHECK(url.GetDomain() == "example.com");

@@ -4,8 +4,8 @@
 
 CStringList::CStringList()
 {
-	m_end = new Node("");
-	m_rend = new Node("");
+	m_end = new Node(""); 
+	m_rend = new Node("");//утечка памяти
 }
 
 CStringList::CStringList(const std::initializer_list<std::string>& initializerList)
@@ -28,7 +28,7 @@ CStringList::CStringList(const CStringList& other)
 	}
 }
 
-CStringList::CStringList(CStringList&& other) noexcept : m_head(other.m_head), m_tail(other.m_tail), m_size(other.m_size), m_end(other.m_end), m_rend(other.m_rend)
+CStringList::CStringList(CStringList&& other) noexcept : m_head(other.m_head), m_tail(other.m_tail), m_size(other.m_size), m_end(other.m_end), m_rend(other.m_rend) //swap
 {
 	other.m_head = other.m_tail = other.m_end = other.m_rend = nullptr;
 	other.m_size = 0;
@@ -74,7 +74,7 @@ void CStringList::PushFront(const std::string& str)
 
 void CStringList::PushBack(const std::string& str)
 {
-	Node* node = new Node(str);
+	Node* node = new Node(str); //утечка
 	if (!m_tail)
 	{
 		m_head = m_tail = node;
@@ -94,7 +94,7 @@ void CStringList::PushBack(const std::string& str)
 	m_size++;
 }
 
-void CStringList::Insert(Iterator it, const std::string& str)
+void CStringList::Insert(Iterator it, const std::string& str) //check const iterator
 {
 	if (it == end())
 	{
@@ -115,7 +115,6 @@ void CStringList::Insert(Iterator it, const std::string& str)
 
 void CStringList::Erase(Iterator it)
 {
-	if (it.ptr == nullptr) return;
 	if (it.ptr == m_end)
 	{
 		throw std::invalid_argument("Can not delete this element\n");
@@ -195,7 +194,7 @@ CStringList::Iterator& CStringList::Iterator::operator++()
 {
 	if (ptr->next == nullptr)
 	{
-		throw("Cannot inrement past end\n");
+		throw std::invalid_argument("Cannot inrement past end\n");
 	}
 	ptr = ptr->next;
 	return *this;
@@ -212,7 +211,7 @@ CStringList::Iterator& CStringList::Iterator::operator--()
 {
 	if (ptr->prev == nullptr)
 	{
-		throw("Cannot inrement pre begin\n");
+		throw std::invalid_argument("Cannot inrement pre begin\n");
 	}
 	ptr = ptr->prev;
 	return *this;
@@ -245,7 +244,7 @@ CStringList::ConstIterator& CStringList::ConstIterator::operator++()
 {
 	if (ptr->next == nullptr)
 	{
-		throw("Cannot inrement past end\n");
+		throw std::invalid_argument("Cannot inrement past end\n");
 	}
 	ptr = ptr->next;
 	return *this;
@@ -262,7 +261,7 @@ CStringList::ConstIterator& CStringList::ConstIterator::operator--()
 {
 	if (ptr->prev == nullptr)
 	{
-		throw("Cannot inrement pre begin\n");
+		throw std::invalid_argument("Cannot inrement pre begin\n");
 	}
 	ptr = ptr->prev;
 	return *this;

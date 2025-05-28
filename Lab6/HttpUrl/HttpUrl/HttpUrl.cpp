@@ -3,7 +3,7 @@
 
 const unsigned short HttpUrl::s_maxPort = 65535;
 const unsigned short HttpUrl::s_minPort = 1;
-const std::regex HttpUrl::s_urlPattern(R"(^(http|https)://([^/:]+)(:(\d+))?(/.*)?$)", std::regex::icase);
+const std::regex HttpUrl::s_urlPattern(R"(^(http|https)://([^/:]+)(:([1-9]\d+))?(/.*)?$)", std::regex::icase);
 
 const std::map<std::string, Protocol> HttpUrl::s_protocols =
 {
@@ -19,53 +19,31 @@ const std::map<Protocol, unsigned short> HttpUrl::s_defaultPorts =
 
 HttpUrl::HttpUrl(const std::string& url)
 {
-	std::smatch match{};
-	if (!std::regex_match(url, match, s_urlPattern))
-	{
-		throw CUrlParsingError("Invalid url\n");
-	}
-
-	ProcessProtocol(match[1]);
-	ProcessDomain(match[2]);
-	try
-	{
-		match[3].matched ? ProcessPort(match[4]) : SetDefaultPort();
-	}
-	catch (std::invalid_argument& e)
-	{
-		throw CUrlParsingError(e.what());
-	}
-
-	ProcessDocument(match[5]);
+	ParseAndInitUrl(url);
 }
 
 HttpUrl::HttpUrl(const std::string& domain, const std::string& document, Protocol protocol)
 {
-	if (domain.empty())
+	try
 	{
-		throw std::invalid_argument("Domain must not be empty\n");
+		ParseAndInitUrl(ProtocolToString(protocol) + "://" + domain + "/" + document);
 	}
-	ProcessDomain(domain);
-	ProcessDocument(document);
-	m_protocol = protocol;
-	SetDefaultPort();
+	catch (CUrlParsingError& e)
+	{
+		throw std::invalid_argument(e.what());
+	}
 }
 
 HttpUrl::HttpUrl(const std::string& domain, const std::string& document, Protocol protocol, unsigned short port)
 {
-	if (domain.empty())
+	try
 	{
-		throw std::invalid_argument("Domain must not be empty\n");
+		ParseAndInitUrl(ProtocolToString(protocol) + "://" + domain + ":" + std::to_string(port) + "/" + document);
 	}
-	if (!IsValidPort(port))
+	catch (CUrlParsingError& e)
 	{
-		throw std::invalid_argument("Invalid must be in range 1 - 65535\n");
+		throw std::invalid_argument(e.what());
 	}
-
-	ProcessDomain(domain);
-	ProcessDocument(document);
-	m_protocol = protocol;
-	m_port = port;
 }
 
 std::string HttpUrl::GetURL() const
@@ -106,18 +84,32 @@ void HttpUrl::ProcessProtocol(const std::string& protocol)
 	std::transform(lowerProtocol.begin(), lowerProtocol.end(), lowerProtocol.begin(), ::tolower);
 
 	auto it = s_protocols.find(lowerProtocol);
-	m_protocol = it->second;
+	if (it == s_protocols.end())
+	{
+		throw std::invalid_argument("Invalid protocol\n");
+	}
+	m_protocol = it->second; //не нашел
 }
 
-void HttpUrl::ProcessDomain(const std::string& domain)
+void HttpUrl::ProcessDomain(const std::string& domain) //domain to lower;
 {
-	m_domain = domain;
+	std::string lowerDomain = domain;
+	std::transform(lowerDomain.begin(), lowerDomain.end(), lowerDomain.begin(), ::tolower);
+	m_domain = lowerDomain;
 }
 
 void HttpUrl::ProcessPort(const std::string& port)
 {
 	uint32_t newPort;
-	newPort = std::stoi(port);
+	try
+	{
+		newPort = std::stoi(port); //try catch;
+	}
+	catch (std::out_of_range& e)
+	{
+		throw std::invalid_argument("Port must be in range 1 - 65535\n");
+	}
+
 	if (!IsValidPort(newPort))
 	{
 		throw std::invalid_argument("Port must be in range 1 - 65535\n");
@@ -145,7 +137,11 @@ void HttpUrl::ProcessDocument(const std::string& document)
 
 void HttpUrl::SetDefaultPort()
 {
-	auto it = s_defaultPorts.find(m_protocol);
+	auto it = s_defaultPorts.find(m_protocol);//не нашел
+	if (it == s_defaultPorts.end())
+	{
+		throw std::invalid_argument("Invalid protocol\n");
+	}
 	m_port = it->second;
 }
 
@@ -165,7 +161,7 @@ bool HttpUrl::IsValidPort(const uint32_t& port) const
 	return port >= s_minPort && port <= s_maxPort;
 }
 
-std::string ProtocolToString(const Protocol& protocol) 
+std::string ProtocolToString(const Protocol& protocol)
 {
 	for (auto item : HttpUrl::s_protocols)
 	{
@@ -174,4 +170,26 @@ std::string ProtocolToString(const Protocol& protocol)
 			return item.first;
 		}
 	}
+}
+
+void HttpUrl::ParseAndInitUrl(const std::string& url)
+{
+	std::smatch match{};
+	if (!std::regex_match(url, match, s_urlPattern))
+	{
+		throw CUrlParsingError("Invalid url\n");
+	}
+
+	ProcessProtocol(match[1]);
+	ProcessDomain(match[2]);
+	try
+	{
+		match[3].matched ? ProcessPort(match[4]) : SetDefaultPort();
+	}
+	catch (std::invalid_argument& e)
+	{
+		throw CUrlParsingError(e.what());
+	}
+
+	ProcessDocument(match[5]);
 }

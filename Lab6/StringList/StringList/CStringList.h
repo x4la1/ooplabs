@@ -15,7 +15,7 @@ class CStringList
 {
 public:
 
-	class Iterator
+	class Iterator //дублирование кода
 	{
 	public:
 		friend class CStringList;
@@ -114,7 +114,7 @@ public:
 private:
 	Node* m_head = nullptr;
 	Node* m_tail = nullptr;
-	Node* m_rend = nullptr;
+	Node* m_rend = nullptr; //rend ubrat
 	Node* m_end = nullptr;
 	size_t m_size = 0;
 	void swap(CStringList& other);
