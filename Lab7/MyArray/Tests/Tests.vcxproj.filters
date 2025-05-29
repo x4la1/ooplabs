@@ -21,9 +21,6 @@
     <ClCompile Include="catch.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="..\MyArray\MyArray.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\MyArray\MyArray.h">

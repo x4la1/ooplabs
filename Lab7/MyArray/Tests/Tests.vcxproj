@@ -147,7 +147,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\MyArray\MyArray.cpp" />
     <ClCompile Include="catch.cpp" />
     <ClCompile Include="Tests.cpp" />
   </ItemGroup>

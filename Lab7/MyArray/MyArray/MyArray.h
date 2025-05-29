@@ -307,10 +307,7 @@ public:
 	using ReverseIterator = std::reverse_iterator<Iterator>;
 	using ConstReverseIterator = std::reverse_iterator<ConstIterator>;
 
-	Iterator begin()
-	{
-		return Iterator(m_data, this);
-	}
+	Iterator begin() { return Iterator(m_data, this); }
 	ConstIterator begin() const { return ConstIterator(m_data, this); }
 	ConstIterator cbegin() const { return ConstIterator(m_data, this); }
 
@@ -427,6 +424,7 @@ public:
 		{
 			Reserve(newSize);
 		}
+
 		if (newSize > m_size)
 		{
 			for (size_t i = m_size; i < newSize; ++i)
@@ -500,7 +498,7 @@ private:
 			throw;
 		}
 
-		for (size_t i = 0; i < m_size; ++i)
+		for (size_t i = 0; i < m_size; ++i) //check
 		{
 			new (newData + i) T(std::move(m_data[i]));
 		}
